@@ -1,0 +1,37 @@
+{
+  "expo": {
+    "name": "doorzy",
+    "slug": "doorzy",
+    "privacy": "public",
+    "sdkVersion": "33.0.0",
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
+    "version": "1.0.1",
+    "orientation": "portrait",
+    "icon": "./assets/icon_1024.png",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#6f38a5"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "package": "com.doorzy.doorzyapp",
+      "googleServicesFile": "./google-services.json",
+      "versionCode" : 2,
+      "permissions" : []
+    },
+    "description": ""
+  }
+}
