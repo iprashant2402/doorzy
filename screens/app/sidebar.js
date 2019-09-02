@@ -33,7 +33,7 @@ constructor(props){
   openShareDialog = async () => {
     try {
       const result = await Share.share({
-        message: 'Hey there! Download the doorzy app from playstore and use invite code '+this.props.mainStore.user.inviteCode+' to get everything delivered to your doorstep.',
+        message: 'Hey there! Download the doorzy app- https://play.google.com/store/apps/details?id=com.doorzy.doorzyapp&hl=en - and use invite code '+this.props.mainStore.user.inviteCode+' to get everything delivered to your doorstep.',
       });
       console.log(result);
       if (result.action === Share.sharedAction) {
@@ -84,9 +84,9 @@ constructor(props){
               </View>
           </View>
         </ScrollView>
-        <View style={styles.footerContainer}>
+        {/**<View style={styles.footerContainer}>
           <Button title="Logout" type="solid" buttonStyle={styles.button} titleStyle={{color:colors.white}} onPress={()=>this.handleSignOut()}/>
-    </View>
+    </View>**/}
       </View>
     );
   }

@@ -48,6 +48,18 @@ class OrderHistoryScreen extends Component {
     return(null);
   }
 
+  /*getDeliveryExecNumber = (order) => {
+    if(order.deliveryExecId){
+      const deliveryExecRef = firebase.firestore().collection('deliveryExecs').doc(order.deliveryExecId);
+      deliveryExecRef.get().then(function(doc){
+        const exec = doc.data();
+        return("+91-"+exec.phone);
+      }).catch(err=>console.log(err));
+    }else{
+      return("Not Assigned");
+    }
+  }*/
+
   getItemAmount = (item) => {
     if(item.amount)
     return ("INR "+item.amount);

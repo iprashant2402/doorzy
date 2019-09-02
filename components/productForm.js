@@ -87,6 +87,9 @@ export default class ProductForm extends Component {
           </View>
         </View>
         <View style={styles.inputRowWrapper}>
+          <Text style={styles.formText}>Quantity</Text>
+        </View>
+        <View style={styles.inputRowWrapper}>
           <View style={styles.btnWrapper}>
             <Button
               type="clear"

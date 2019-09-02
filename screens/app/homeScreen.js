@@ -94,7 +94,7 @@ class HomeScreen extends Component {
     }
 
     render() {
-      if(this.state.time>23 || this.state.time<9){  
+      if(this.state.time>=23 || this.state.time<9){  
       addProductForm = 
       <View style={{marginTop:30,height:300,justifyContent:"center",alignItems:'center'}}>
         <Text style={styles.text1}>Sorry, we do not deliver at this time.</Text>
@@ -113,11 +113,11 @@ class HomeScreen extends Component {
           <ScrollView>
             {addProductForm}
             <View style={styles.btnWrapper}>
-              <Button disabled={(this.state.time>23 || this.state.time<9)?true:false} title="ADD MORE ITEMS" onPress={()=>this.addProduct()} buttonStyle={styles.btn} titleStyle={styles.btnTitle} type="clear"/>
+              <Button disabled={(this.state.time>=23 || this.state.time<9)?true:false} title="ADD MORE ITEMS" onPress={()=>this.addProduct()} buttonStyle={styles.btn} titleStyle={styles.btnTitle} type="clear"/>
             </View>
           </ScrollView>
           </KeyboardAwareScrollView>
-          <Button disabled={(this.state.time>23 || this.state.time<9)?true:false} title="PROCEED TO CART" buttonStyle={styles.orderbtn} type='solid' onPress={()=>this.handleSubmit()}/>
+          <Button disabled={(this.state.time>=23 || this.state.time<9)?true:false} title="PROCEED TO CART" buttonStyle={styles.orderbtn} type='solid' onPress={()=>this.handleSubmit()}/>
           </View>
         )
     }
