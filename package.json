@@ -18,6 +18,7 @@
     "mobx-react": "^5.4.3",
     "mobx-state-tree": "^3.14.0",
     "react": "16.8.3",
+    "react-content-loader": "^4.2.2",
     "react-dom": "^16.8.6",
     "react-native": "https://github.com/expo/react-native/archive/sdk-33.0.0.tar.gz",
     "react-native-elements": "^1.1.0",

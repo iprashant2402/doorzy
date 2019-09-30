@@ -18,7 +18,7 @@
       "backgroundColor": "#6f38a5"
     },
     "updates": {
-      "fallbackToCacheTimeout": 0
+      "fallbackToCacheTimeout": 30000
     },
     "assetBundlePatterns": [
       "**/*"
@@ -29,7 +29,7 @@
     "android": {
       "package": "com.doorzy.doorzyapp",
       "googleServicesFile": "./google-services.json",
-      "versionCode" : 2,
+      "versionCode" : 3,
       "permissions" : []
     },
     "description": ""

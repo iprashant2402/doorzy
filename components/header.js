@@ -31,7 +31,7 @@ export class HeaderComponent extends Component{
         }
         centerComponent = {<View><Text style={styles.logoTextPrimary}>d<Text style={styles.logoTextSecondary}>oo</Text>rzy</Text></View>}
         rightComponent = {<View style={{flexDirection:'row'}}>
-          <Button type="clear" icon={cartButtonIcon} onPress={()=>this.props.navigation.navigate('CartScreen')} />
+          <Button type="clear" title="Offers" titleStyle={styles.btnTitle} onPress={()=>this.props.navigation.navigate('OfferScreen')} />
         <Button type="clear" icon={<Icon
         name="bell"
         size={23}
@@ -54,7 +54,7 @@ export class HeaderComponent extends Component{
         }
         centerComponent = {<View><Text style={styles.logoTextPrimary}>d<Text style={styles.logoTextSecondary}>oo</Text>rzy</Text></View>}
         rightComponent = {<View style={{flexDirection:'row'}}>
-          <Button type="clear" icon={cartButtonIcon} onPress={()=>this.props.navigation.navigate('CartScreen')} />
+          <Button type="clear" title="Offers" titleStyle={styles.btnTitle} onPress={()=>this.props.navigation.navigate('OfferScreen')} />
         <Button type="clear" icon={<BadgeIcon
         name="bell"
         size={23}
@@ -80,5 +80,9 @@ logoTextPrimary : {
 logoTextSecondary : {
   color : colors.brandSecondary,
   fontFamily : 'josephine'
+},
+btnTitle : {
+  fontSize : 15,
+  color : colors.white
 }
 });

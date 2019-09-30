@@ -37,6 +37,7 @@ export default class LoginScreen extends React.Component {
   }
 
   signIn = () => {
+    this.setState({loading:true});
     firebase.auth().signInAnonymously().then(()=>{
       this.setState({loading:false});
     }).catch(err=>console.log(err));
@@ -73,28 +74,29 @@ export default class LoginScreen extends React.Component {
           <FullWidthImage source={require('../../assets/images/header-logo.png')} ratio={1/3}/>
           </View>
           <View style={styles.masterFormContainer}>
+          <FullWidthImage source={require('../../assets/images/login_page_graphic.png')} ratio={3/3}/>
           {/*<View style={styles.formContainer&&styles.textWrapper}>
             <Text style={styles.text1}>
               We want to provide best service to our customers and in order to do so we are currently accepting invite based login only.
               You must have an invite code to sign in.
             </Text>
-          </View>*/}
+          </View>
           <View style={styles.formContainer}>
             <Text style={{color:colors.white,textAlign : 'center'}}>Enter your friend's invite code</Text>
           </View>
         
-          <View style={styles.formContainer}>
+          {/*<View style={styles.formContainer}>
             <TextInput style={styles.textInput} placeholder="INVITE CODE" value={this.state.inviteCode} onChangeText={(text)=>{this.setState({
               inviteCode : text
             })}}/>
-          </View>
+          </View>*/}
           
-          <View style={styles.formContainer}>
+          {/*<View style={styles.formContainer}>
             <Text style={{color:colors.danger}}>{this.state.error}</Text>
+        </View>*/}
           </View>
-          </View>
-          <View style={styles.btnWrapper}>
-          <Button buttonStyle={styles.btn} disabled={this.state.loading} loading={this.state.loading} type='solid' raised={false} onPress={()=>this.logIn()} title="SIGN IN"/>
+          <View style={styles.btnWrapper}> 
+          <Button buttonStyle={styles.btn} disabled={this.state.loading} loading={this.state.loading} type='solid' raised={false} onPress={()=>this.signIn()} title="NEXT"/>
           </View>
         </View>
         

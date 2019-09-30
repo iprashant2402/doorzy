@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, ActivityIndicator, Platform ,StyleSheet} from "react-native";
+import { View, Text, ActivityIndicator, Platform ,StyleSheet,ImageBackground} from "react-native";
 import firebase from "firebase";
 import "firebase/firestore";
 import { inject } from "mobx-react/native";
@@ -100,14 +100,14 @@ export default class AuthLoading extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <ImageBackground source={require('../../assets/images/doodles/doodles.png')} style={styles.container}>
         <Text style={styles.text}>
-          Loggin you in..
+          Signing you in...
           </Text>
           <View style={styles.indicator}>
               <ActivityIndicator color={colors.primary} />
-        </View>
-      </View>
+          </View>
+      </ImageBackground>
     );
   }
 }

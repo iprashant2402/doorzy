@@ -14,7 +14,9 @@ export default class ProductForm extends Component {
       name: "",
       brand: "",
       quantity: 1,
-      id : this.props.id
+      preferredShop : "",
+      id : this.props.id,
+      estAmt : 0
     };
   }
 
@@ -42,6 +44,8 @@ export default class ProductForm extends Component {
         item.brand = this.state.brand;
         item.quantity = this.state.quantity;
         item.id = this.state.id;
+        item.preferredShop = this.state.preferredShop;
+        item.estAmt = this.state.estAmt;
         this.props.getProduct(item);
     }
 
@@ -49,8 +53,8 @@ export default class ProductForm extends Component {
     return (
       <View style={styles.container&&styles.orderItem}>
         <View style={styles.inputRowWrapper}>
-          <View style={styles.leftInputWrapper}>
-            <Text style={styles.formText}> What do you want to buy?</Text>
+          <View style={styles.quantityContainer}>
+            <Text style={styles.formText}> <Text style={{color:colors.danger}}>*</Text>What do you want to buy?</Text>
             <TextInput
               style={styles.input}
               placeholder="Maggi, Facewash, Ice-cream etc."
@@ -60,36 +64,9 @@ export default class ProductForm extends Component {
               })}}
             />
           </View>
-          <View style={styles.rightBtnWrapper}>
-            <Button 
-              onPress={() => this.props.removeProduct(this.props.id)}
-              type="clear"
-              icon={
-                <Icon type
-                ="antdesign" name="delete" color={colors.danger} />
-              }
-            />
-          </View>
-        </View>
-        <View style={styles.inputRowWrapper}>
-          <View style={styles.leftInputWrapper}>
-          <Text style={styles.formText}> Brand <Text style={styles.txt}>(Optional)</Text></Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Lays, Gillete, Marlboro etc."
-              value={this.state.brand}
-              onChangeText = {text => {this.setState({brand : text},() => {
-                this.props.getProduct(this.state);
-              })}}
-            />
-          </View>
-          <View style={styles.rightBtnWrapper}>
-          </View>
-        </View>
-        <View style={styles.inputRowWrapper}>
-          <Text style={styles.formText}>Quantity</Text>
-        </View>
-        <View style={styles.inputRowWrapper}>
+          <View style={styles.quantityContainer}>
+          <Text style={styles.quantitylabel}>Quantity</Text>  
+          <View style={styles.inputRowWrapperCustom}>
           <View style={styles.btnWrapper}>
             <Button
               type="clear"
@@ -115,7 +92,86 @@ export default class ProductForm extends Component {
               onPress= {()=>this.incrementQuantity()}
             />
           </View>
-          <View style={styles.btnWrapper}></View>
+          </View>
+          </View>
+        </View>
+        <View style={styles.inputRowWrapper}>
+          <View style={styles.quantityContainer}>
+          <Text style={styles.formText}> Brand <Text style={styles.txt}></Text></Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Lays, Gillete, Marlboro etc."
+              value={this.state.brand}
+              onChangeText = {text => {this.setState({brand : text},() => {
+                this.props.getProduct(this.state);
+              })}}
+            />
+          </View>
+          <View style={styles.quantityContainer}>
+          <Text style={styles.formText}> Preferred Shop <Text style={styles.txt}></Text></Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Tara Maa, All Mart, Limra etc."
+              value={this.state.preferredShop}
+              onChangeText = {text => {this.setState({preferredShop : text},() => {
+                this.props.getProduct(this.state);
+              })}}
+            />
+          </View>
+        </View>
+        <View style={styles.inputRowWrapper}>
+          {/*<View style={styles.quantityWrapper}>
+        <Text style={styles.formText}>Quantity</Text>
+          <View style={styles.inputRowWrapperCustom}>
+          <View style={styles.btnWrapper}>
+            <Button
+              type="clear"
+              buttonStyle={styles.btn}
+              icon={
+                <Icon
+                  type="antdesign"
+                  name="minus"
+                  color={colors.primary}
+                />
+              }
+              onPress = {()=>this.decrementQuantity()}
+            />
+          </View>
+          <View style={styles.quantityWrapper}>
+            <Text style={styles.quantity}>{this.state.quantity}</Text>
+          </View>
+          <View style={styles.btnWrapper}>
+            <Button
+              type="clear"
+              buttonStyle={styles.btn}
+              icon={{ name: "add", color: colors.primary }}
+              onPress= {()=>this.incrementQuantity()}
+            />
+          </View>
+          </View>
+            </View>*/}
+          <View style={styles.estAmtWrapper}>
+          <Text style={styles.formText}> Estimated Cost</Text>
+            <TextInput
+              style={styles.inputBox}
+              placeholder="0.00 Cost per Item"
+              keyboardType="numeric"
+              value={this.state.estAmt}
+              onChangeText = {text => {this.setState({estAmt : text},() => {
+                this.props.getProduct(this.state);
+              })}}
+            />
+          </View>
+          <View style={styles.rightBtnWrapper}>
+            <Button 
+              onPress={() => this.props.removeProduct(this.props.id)}
+              type="clear"
+              icon={
+                <Icon type
+                ="antdesign" name="delete" color={colors.danger} />
+              }
+            />
+          </View>
         </View>
       </View>
     );
@@ -126,10 +182,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 1
   },
-
+  inputBox: {
+    height: 50,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.greyBorder,
+    //padding: 10
+  },
   input: {
     height: 50,
-    borderBottomWidth: 2,
+    borderBottomWidth: 1,
     borderBottomColor: colors.greyBorder
   },
   inputWrapper: {
@@ -137,18 +198,40 @@ const styles = StyleSheet.create({
   },
   inputRowWrapper: {
     flexDirection: "row",
-    margin: 10
+    margin: 10,
+  },
+  inputRowWrapperCustom: {
+    flexDirection: "row",
+    marginVertical: 10
   },
   btnWrapper: {
     flex: 1
   },
-  btn: {
-    borderWidth: 0,
-    borderColor: colors.primary,
+  quantityWrapper : {
+    flex: 1,
+    justifyContent: "center",
+    borderWidth : 1,
+    borderColor : colors.primary,
+    padding : 1
   },
-  quantityWrapper: {
-    flex: 2,
-    justifyContent: "center"
+  quantityContainer : {
+    flex : 1,
+    marginHorizontal : 7.5,
+  },
+  quantitylabel : {
+    textAlign: "center",
+    color: colors.primary,
+
+  },
+  estAmtWrapper: {
+    flex: 1,
+    //borderWidth : 1,
+    //borderColor : colors.greyBorder,
+    //padding : 10,
+    marginHorizontal : 2.5
+  },
+  btn: {
+    borderWidth: 0
   },
   quantity: {
     textAlign: "center",
@@ -157,7 +240,7 @@ const styles = StyleSheet.create({
     color: colors.primary
   },
   leftInputWrapper: {
-    flex: 4
+    flex: 1
   },
   rightBtnWrapper: {
     flex: 1
@@ -171,6 +254,6 @@ const styles = StyleSheet.create({
   orderItem : {
     marginBottom : 10,
     backgroundColor : colors.white,
-    padding : 20
+    padding : 5
   },
 });

@@ -90,11 +90,20 @@ export default class CartScreen extends Component {
   render() {
     if(this.props.mainStore.cart.length<1){
       productItem = <Card style={styles.productItem}><Text style={styles.text1}>Your cart is empty :(</Text></Card>
-    }
+      estTotal = null;
+      }
     else{
     productItem = this.props.mainStore.cart.map((l, i) => (
       <ProductItem product={l} style={styles.productItem} />
     ));
+    var total = 0;
+    this.props.mainStore.cart.map((l,i)=>{
+      if(l.estAmt){
+        total = total + parseInt(l.estAmt);
+      }
+    });
+    estTotal = <View style={styles.titleContainer}><Text style={styles.total}>Estimated Total : {total} <Text style={styles.text1}>(excl. delivery & packing charges)</Text></Text></View>
+    
   }
     const user = this.props.mainStore.user;
     if (user.addresses) {
@@ -171,6 +180,7 @@ export default class CartScreen extends Component {
             </View>
           </Modal>
           {productItem}
+          {estTotal}
           <View style={styles.ph20}>
             <Text style={styles.textHeading}>Choose a delivery address</Text>
           </View>
@@ -196,6 +206,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.white
+  },
+  total : {
+    fontSize : 20,
+    fontFamily : 'Rubik-Bold',
+    color : colors.text
   },
   selectedAddress: {
     backgroundColor: "#f1ecf6",

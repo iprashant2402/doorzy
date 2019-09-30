@@ -15,6 +15,8 @@ class MainStore {
 
   @observable route = 'MyAccountScreen';
 
+  @observable selectedOutlet = {};
+
   @computed get cartCount() {
     return this.cart.length;
   }
@@ -45,6 +47,10 @@ class MainStore {
 
   @action setUser(user){
       this.user = user;
+  }
+
+  @action setOutlet(outlet){
+    this.selectedOutlet = outlet;
   }
 
   @action setNotifications(notifs){

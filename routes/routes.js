@@ -14,6 +14,8 @@ import {RegisterScreenNavigator} from '../screens/app/firstTimeSignIn';
 import AddLocationScreen from '../screens/app/addLocationScreen';
 import CartScreen from '../screens/app/cartScreen';
 import ShareScreen from '../screens/app/shareScreen';
+import {OfferScreenNavigator} from '../screens/app/offerScreen';
+import {OutletMenuScreenNavigator} from '../screens/app/outletDetails';
 import { createStackNavigator, createAppContainer, createDrawerNavigator, createSwitchNavigator} from 'react-navigation';
 import { inject } from 'mobx-react';
 
@@ -33,7 +35,9 @@ const AppNavigator = createDrawerNavigator({
   NotificationScreen : NotificationScreen,
   AddLocationScreen : AddLocationScreen,
   CartScreen : CartScreen,
-  ShareScreen : ShareScreen 
+  ShareScreen : ShareScreen,
+  OfferScreen : OfferScreenNavigator,
+  OutletMenuScreen : OutletMenuScreenNavigator 
 },{
   contentComponent : SideBar,
   hideStatusBar : true
