@@ -45,7 +45,7 @@ async function goToMenu(id, navigate, title, active, store) {
   }
 }
 
-function OutletItem({ title, active, id, navigate, store }) {
+function OutletItem({ title, active, id, navigate, store, offer }) {
   return (
     <Card style={styles.outletItem}>
       <Avatar
@@ -66,6 +66,9 @@ function OutletItem({ title, active, id, navigate, store }) {
       </Text>
       <Text style={active ? styles.itemActive : styles.itemInactive}>
         {active ? "Open" : "Closed"}
+      </Text>
+      <Text style={styles.offer}>
+        {offer>0 ? offer+"% OFF" :  ""}
       </Text>
     </Card>
   );
@@ -241,7 +244,7 @@ class HomeScreen extends Component {
             <Divider style={{ backgroundColor: "transparent", height: 20 }} />
             <View style={styles.originals}>
               <Text style={styles.logoTextPrimary}>
-                d<Text style={styles.logoTextSecondary}>oo</Text>rzy ORIGINALS
+                d<Text style={styles.logoTextSecondary}>oo</Text>rzy Food Partners
               </Text>
             </View>
             <FlatList
@@ -254,6 +257,7 @@ class HomeScreen extends Component {
                   active={item.active}
                   id={item.id}
                   store={this.props.mainStore}
+                  offer={item.offer?item.offer:0}
                 />
               )}
               keyExtractor={item => item.id}
@@ -332,6 +336,12 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: colors.successButton,
     margin: 5
+  },
+  offer: {
+    fontFamily: "Rubik-Bold",
+    fontSize: 15,
+    color: colors.successButton,
+    margin: 5,
   },
   itemInactive: {
     fontFamily: "Rubik-Regular",

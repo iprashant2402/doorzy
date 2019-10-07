@@ -94,11 +94,12 @@ export default class CartScreen extends Component {
       }
     else{
     productItem = this.props.mainStore.cart.map((l, i) => (
-      <ProductItem product={l} style={styles.productItem} />
+      <ProductItem product={l} key={i} style={styles.productItem} />
     ));
     var total = 0;
     this.props.mainStore.cart.map((l,i)=>{
       if(l.estAmt){
+        console.log("cart:"+l.estAmt)
         total = total + parseInt(l.estAmt);
       }
     });
