@@ -13,9 +13,10 @@ export default function ProductItem(props) {
         <View style={styles.titleWrapper}>
           <Text style={styles.title}>{props.product.brand} {props.product.name}</Text>
         </View>
+        <Text style={styles.text1}>Quantity : <Text style={styles.quantity}>{props.product.quantity}</Text></Text>
         </View>
         <View style={styles.rightWrapper}>
-            <Text style={styles.text1}>Quantity : <Text style={styles.quantity}>{props.product.quantity}</Text></Text>
+          <Button title="Remove" type="outline" buttonStyle={styles.btn} titleStyle={styles.btnTitle} onPress={()=>props.removeItem(props.product.id)}/>           
         </View>
       </Card>
     );
@@ -25,7 +26,21 @@ export default function ProductItem(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop : 20
+    paddingTop : 20,
+    flexDirection : 'row'
+  },
+  rightWrapper : {
+    flex : 1
+  },
+  leftWrapper : {
+    flex : 3
+  },
+  btn : {
+    borderColor : colors.danger,
+    borderWidth : 1
+  },
+  btnTitle : {
+    color : colors.danger
   },
   titleWrapper : {
     marginBottom : 5

@@ -10,7 +10,8 @@ import {
   Platform,
   StyleSheet,
   ScrollView,
-  FlatList
+  FlatList,
+  ActivityIndicator
 } from "react-native";
 import { inject, observer } from "mobx-react/native";
 import firebase from "firebase";
@@ -49,7 +50,8 @@ class OutletMenuScreen extends Component {
     this.state = {
       time: 10,
       menu: [],
-      products: []
+      products: [],
+      showIndicator : true
     };
   }
 
@@ -60,8 +62,9 @@ class OutletMenuScreen extends Component {
     return hours;
   };
 
-  addToCart = products => {
+  addToCart = async products => {
     this.props.mainStore.setCart(products);
+    await this.props.mainStore.setRoute('OutletMenuScreen');
     console.log("HOMESCREEN:" + this.props.mainStore.cartCount);
     this.props.navigation.navigate("CartScreen");
   };
@@ -158,6 +161,10 @@ class OutletMenuScreen extends Component {
     console.log("LINE 54 : outletDetails.js : "+ this.props.mainStore.selectedOutlet.id);
     const thisRef = this;
     this.focusListener = this.props.navigation.addListener('didFocus',()=>{
+      this.setState({
+        menu : [],
+        products : []
+      });
       const menuRef = firebase
       .firestore()
       .collection("menus")
@@ -177,6 +184,27 @@ class OutletMenuScreen extends Component {
           });
           thisRef.setState({
             menu: foodItems
+          },()=>{
+            thisRef.setState({
+              showIndicator : false
+            });
+            // const tempCart = thisRef.props.mainStore.cart;
+            // console.log("OUTLET DETAILS : LINE 187 :");
+            // console.log(tempCart);
+            // const tempMenu = thisRef.state.menu;
+            // const tempProducts = thisRef.state.products;
+            // for(var i=0;i<tempMenu.length;i++){
+            //   tempCart.forEach(cartItem => {
+            //     if(tempMenu[i].id === cartItem.id){
+            //       //tempProducts.push(cartItem);
+            //       tempMenu[i].quantity = cartItem.quantity;
+            //     }
+            //   })
+            // }
+            // thisRef.setState({
+            //   menu : tempMenu,
+            //   products : tempProducts
+            // },()=>{console.log(thisRef.state.menu)});
           });
         }
       }).catch(err=>console.log(err));
@@ -213,7 +241,12 @@ class OutletMenuScreen extends Component {
             <View style={{ padding: 20 }}>
               <Text style={styles.menuTitle}>Menu</Text>
             </View>
-            <View>{menuList}</View>
+            <View>
+            <View style={{justifyContent:'center',textAlign:'center',alignContent:'center',alignItems:'center'}}>
+            <ActivityIndicator animating={this.state.showIndicator} size="large" color={colors.primary} />
+            </View>
+            {menuList}
+            </View>
           </ScrollView>
         </KeyboardAwareScrollView>
         <Button

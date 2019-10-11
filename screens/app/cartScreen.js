@@ -62,8 +62,12 @@ export default class CartScreen extends Component {
     this.setState({ showModal: visible });
   }
 
+  removeItem = id => {
+    this.props.mainStore.removeItemFromCart(id);
+  }
+
   submitOrder = () => {
-    if (!(this.state.address === "") && !(this.props.mainStore.cart.length<1)) {
+    if (!(this.state.address === "" || this.state.address === undefined) && !(this.props.mainStore.cart.length<1)) {
       this.setState({ showIndicator: true }, () => {
         if (
           placeOrder(
@@ -76,7 +80,7 @@ export default class CartScreen extends Component {
         ) {
           this.setState({ showIndicator: false }, () => {
             this.setState({ showModal: true });
-            this.props.mainStore.setCart([]);
+            this.props.mainStore.resetCart();
           });
         } else {
           console.log("FAILED TO PLACE ORDER");
@@ -84,6 +88,7 @@ export default class CartScreen extends Component {
       });
     } else {
       console.log("ADDRESS ISSUE");
+      alert("Please Select An Address");
     }
   };
 
@@ -94,7 +99,7 @@ export default class CartScreen extends Component {
       }
     else{
     productItem = this.props.mainStore.cart.map((l, i) => (
-      <ProductItem product={l} key={i} style={styles.productItem} />
+      <ProductItem product={l} key={i} style={styles.productItem} removeItem = {this.removeItem} />
     ));
     var total = 0;
     this.props.mainStore.cart.map((l,i)=>{
@@ -128,6 +133,9 @@ export default class CartScreen extends Component {
         </TouchableOpacity>
       ));
     } else {
+      this.setState({
+        address : undefined
+      });
       addressComponent = <View style={styles.generalTextWrapper}>
         <Text style={styles.text1}>You don't have any saved address.</Text>
         </View>;
@@ -146,7 +154,7 @@ export default class CartScreen extends Component {
                   color={colors.white}
                 />
               }
-              onPress={() => this.props.navigation.goBack()}
+              onPress={() => this.props.navigation.navigate(this.props.mainStore.route)}
             />
           </View>
           <View style={styles.titleContainer}>
@@ -183,7 +191,7 @@ export default class CartScreen extends Component {
           {productItem}
           {estTotal}
           <View style={styles.ph20}>
-            <Text style={styles.textHeading}>Choose a delivery address</Text>
+            <Text style={styles.textHeading}>Tap the Address to proceed:</Text>
           </View>
           {addressComponent}
           <View style={styles.generalTextWrapper}>
@@ -264,7 +272,7 @@ const styles = StyleSheet.create({
   },
   textHeading: {
     fontFamily: "Rubik-Bold",
-    fontSize: 15,
+    fontSize: 20,
     color: colors.text,
     marginBottom: 15,
     marginTop: 35

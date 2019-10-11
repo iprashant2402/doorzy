@@ -45,7 +45,7 @@ async function goToMenu(id, navigate, title, active, store) {
   }
 }
 
-function OutletItem({ title, active, id, navigate, store, offer }) {
+function OutletItem({ title, active, id, navigate, store, offer, image }) {
   return (
     <Card style={styles.outletItem}>
       <Avatar
@@ -53,7 +53,9 @@ function OutletItem({ title, active, id, navigate, store, offer }) {
           goToMenu(id, navigate, title, active, store);
         }}
         placeholderStyle={{ backgroundColor: colors.primarySupport }}
-        title={title[0]}
+        source={{
+          uri : image
+        }}
         size="xlarge"
       />
       <Text
@@ -142,8 +144,9 @@ class HomeScreen extends Component {
     });
   };
 
-  addToCart = products => {
+  addToCart = async products => {
     this.props.mainStore.setCart(products);
+    await this.props.mainStore.setRoute('HomeScreen');
     console.log("HOMESCREEN:" + this.props.mainStore.cartCount);
     this.props.navigation.navigate("CartScreen");
   };
@@ -193,11 +196,12 @@ class HomeScreen extends Component {
           style={{
             marginTop: 30,
             justifyContent: "center",
-            alignItems: "center"
+            alignItems: "center",
+            paddingHorizontal : 20
           }}
         >
           <Text style={styles.text1}>
-            We are accepting orders only for Jeetu's Kitchen after 11:00 PM.
+            We are accepting orders only for doorzy Food Partners after 11:00 PM.
           </Text>
         </View>
       );
@@ -258,6 +262,7 @@ class HomeScreen extends Component {
                   id={item.id}
                   store={this.props.mainStore}
                   offer={item.offer?item.offer:0}
+                  image={item.image}
                 />
               )}
               keyExtractor={item => item.id}
