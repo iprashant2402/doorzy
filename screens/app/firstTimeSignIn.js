@@ -79,8 +79,8 @@ class RegisterScreen extends Component {
       this.setState({loading:true});
       const db = firebase.firestore();
       var uid = this.props.mainStore.uid;
-      var nid = notifId();
-      var notifBucket = db.collection('notifications').doc(uid).collection('notifs');
+      // var nid = notifId();
+      // var notifBucket = db.collection('notifications').doc(uid).collection('notifs');
       var rootRef = this.props.navigation;
       var storeRef = this.props;
       var thisRef = this;
@@ -94,18 +94,18 @@ class RegisterScreen extends Component {
         regTimestamp : + new Date()
       };
 
-      await registerForPushNotificationsAsync(uid);
+      // await registerForPushNotificationsAsync(uid);
 
-      await notifBucket.doc(nid).set({
-        id : nid,
-        timestamp : + new Date(),
-        read : false,
-        content : "Hi "+this.state.fname+", Welcome to the doorzy family. You are one of our first customers and you are special for us. I personally thank you for choosing doorzy as your doorstep delivery companion. Also, we are open to feedbacks and appreciate any kind of feedback or criticism.",
-        title : "Welcome aboard!"
-      }).catch(function(err){
-        this.setState({loading:false});
-        console.log(err);
-      });
+      // await notifBucket.doc(nid).set({
+      //   id : nid,
+      //   timestamp : + new Date(),
+      //   read : false,
+      //   content : "Hi "+this.state.fname+", Welcome to the doorzy family. You are one of our first customers and you are special for us. I personally thank you for choosing doorzy as your doorstep delivery companion. Also, we are open to feedbacks and appreciate any kind of feedback or criticism.",
+      //   title : "Welcome aboard!"
+      // }).catch(function(err){
+      //   this.setState({loading:false});
+      //   console.log(err);
+      // });
 
       await db.collection("inviteCodes").doc(uid).set({code : inviteCode,uid : uid}).then(()=>{
         
