@@ -12,11 +12,11 @@ export default class ProductForm extends Component {
     super(props);
     this.state = {
       name: "",
-      brand: "",
+      // brand: "",
       quantity: 1,
-      preferredShop : "",
+      // preferredShop : "",
       id : this.props.id,
-      estAmt : 0
+      // estAmt : 0
     };
   }
 
@@ -41,11 +41,11 @@ export default class ProductForm extends Component {
     returnProduct = () => {
         const item = {};
         item.name = this.state.name;
-        item.brand = this.state.brand;
+        // item.brand = this.state.brand;
         item.quantity = this.state.quantity;
         item.id = this.state.id;
-        item.preferredShop = this.state.preferredShop;
-        item.estAmt = this.state.estAmt;
+        // item.preferredShop = this.state.preferredShop;
+        // item.estAmt = this.state.estAmt;
         this.props.getProduct(item);
     }
 
@@ -95,7 +95,7 @@ export default class ProductForm extends Component {
           </View>
           </View>
         </View>
-        <View style={styles.inputRowWrapper}>
+        {/* <View style={styles.inputRowWrapper}>
           <View style={styles.quantityContainer}>
           <Text style={styles.formText}> Brand <Text style={styles.txt}></Text></Text>
             <TextInput
@@ -119,7 +119,7 @@ export default class ProductForm extends Component {
             />
           </View>
         </View>
-        <View style={styles.inputRowWrapper}>
+        <View style={styles.inputRowWrapper}> */}
           {/*<View style={styles.quantityWrapper}>
         <Text style={styles.formText}>Quantity</Text>
           <View style={styles.inputRowWrapperCustom}>
@@ -150,7 +150,7 @@ export default class ProductForm extends Component {
           </View>
           </View>
             </View>*/}
-          <View style={styles.estAmtWrapper}>
+          {/* <View style={styles.estAmtWrapper}>
           <Text style={styles.formText}> Estimated Cost</Text>
             <TextInput
               style={styles.inputBox}
@@ -161,7 +161,7 @@ export default class ProductForm extends Component {
                 this.props.getProduct(this.state);
               })}}
             />
-          </View>
+          </View> */}
           <View style={styles.rightBtnWrapper}>
             <Button 
               onPress={() => this.props.removeProduct(this.props.id)}
@@ -171,7 +171,7 @@ export default class ProductForm extends Component {
                 ="antdesign" name="delete" color={colors.danger} />
               }
             />
-          </View>
+          {/* </View> */}
         </View>
       </View>
     );
