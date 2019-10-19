@@ -19,10 +19,10 @@ import { colors } from "../../colors/colors";
 import { TextInput } from "react-native-gesture-handler";
 import { Button } from "react-native-elements";
 import generateInviteCode from '../../util/generateInviteCode';
-import registerForPushNotificationsAsync from '../../util/registerPushNotification';
+// import registerForPushNotificationsAsync from '../../util/registerPushNotification';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
-const notifId = require('uuid/v4');
+// const notifId = require('uuid/v4');
 
 if (Platform.OS !== "web") {
   window = undefined;
