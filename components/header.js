@@ -29,7 +29,7 @@ export class HeaderComponent extends Component{
         color="white"
       />} onPress={()=>this.props.navigation.toggleDrawer()} />
         }
-        centerComponent = {<View><Text style={styles.logoTextPrimary}>d<Text style={styles.logoTextSecondary}>oo</Text>rzy</Text></View>}
+        centerComponent = {<View><Text style={styles.logoTextPrimary}>Vire<Text style={styles.logoTextSecondary}>Store</Text></Text></View>}
         rightComponent = {<View style={{flexDirection:'row'}}>
           <Button type="clear" title="Offers" titleStyle={styles.btnTitle} onPress={()=>this.props.navigation.navigate('OfferScreen')} />
         <Button type="clear" icon={<Icon
@@ -52,7 +52,7 @@ export class HeaderComponent extends Component{
         color="white"
       />} onPress={()=>this.props.navigation.toggleDrawer()} />
         }
-        centerComponent = {<View><Text style={styles.logoTextPrimary}>d<Text style={styles.logoTextSecondary}>oo</Text>rzy</Text></View>}
+        centerComponent = {<View><Text style={styles.logoTextPrimary}>Vire<Text style={styles.logoTextSecondary}>Store</Text></Text></View>}
         rightComponent = {<View style={{flexDirection:'row'}}>
           <Button type="clear" title="Offers" titleStyle={styles.btnTitle} onPress={()=>this.props.navigation.navigate('OfferScreen')} />
         <Button type="clear" icon={<BadgeIcon

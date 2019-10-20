@@ -67,7 +67,7 @@ export default class ProductForm extends Component {
           <View style={styles.quantityContainer}>
           <Text style={styles.quantitylabel}>Quantity</Text>  
           <View style={styles.inputRowWrapperCustom}>
-          {/*<View style={styles.btnWrapper}>
+          {/* <View style={styles.btnWrapper}>
             <Button
               type="clear"
               buttonStyle={styles.btn}
@@ -80,40 +80,23 @@ export default class ProductForm extends Component {
               }
               onPress = {()=>this.decrementQuantity()}
             />
-            </View>*/}
+          </View> */}
           <View style={styles.quantityWrapper}>
           <TextInput
               style={styles.input}
+              placeholder="Quantity"
               value={this.state.quantity}
-              onChangeText = {text => {this.setState({quantity : number},() => {
-                this.props.getProduct(this.state);
-              })}}
             />
+            {/* <Text style={styles.quantity}>{this.state.quantity}</Text> */}
           </View>
-          <View style={styles.btnWrapper}>
-          <Button 
-              onPress={() => this.props.removeProduct(this.props.id)}
-              type="clear"
-              icon={
-                <Icon type
-                ="antdesign" name="plus" color={colors.danger} />
-              }
-            />
-            <Button 
-              onPress={() => this.props.removeProduct(this.props.id)}
-              type="clear"
-              icon={
-                <Icon type
-                ="antdesign" name="minus" color={colors.danger} />
-              }
-            />
-            {/*<Button
+          {/* <View style={styles.btnWrapper}>
+            <Button
               type="clear"
               buttonStyle={styles.btn}
               icon={{ name: "add", color: colors.primary }}
               onPress= {()=>this.incrementQuantity()}
-            />*/}
-            </View>
+            />
+          </View> */}
           </View>
           </View>
         </View>
@@ -190,15 +173,7 @@ export default class ProductForm extends Component {
               type="clear"
               icon={
                 <Icon type
-                ="antdesign" name="plus" color={colors.danger} />
-              }
-            />
-            <Button 
-              onPress={() => this.props.removeProduct(this.props.id)}
-              type="clear"
-              icon={
-                <Icon type
-                ="antdesign" name="minus" color={colors.danger} />
+                ="antdesign" name="delete" color={colors.danger} />
               }
             />
           {/* </View> */}
@@ -242,7 +217,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderWidth : 1,
     borderColor : colors.primary,
-    padding : 0.5
+    padding : 1
   },
   quantityContainer : {
     flex : 1,

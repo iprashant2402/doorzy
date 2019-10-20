@@ -1,8 +1,3 @@
-/*
-This View is responsible for displaying form to take user inputs for placing order 
-e.g. what product? which brand? quantity? ....
-*/
-
 import React, { Component } from "react";
 import { View, ScrollView, Text, Platform, StyleSheet } from "react-native";
 import { inject, observer } from "mobx-react/native";
@@ -19,10 +14,10 @@ import { colors } from "../../colors/colors";
 import { TextInput } from "react-native-gesture-handler";
 import { Button } from "react-native-elements";
 import generateInviteCode from '../../util/generateInviteCode';
-// import registerForPushNotificationsAsync from '../../util/registerPushNotification';
+import registerForPushNotificationsAsync from '../../util/registerPushNotification';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
-// const notifId = require('uuid/v4');
+const notifId = require('uuid/v4');
 
 if (Platform.OS !== "web") {
   window = undefined;
@@ -79,8 +74,8 @@ class RegisterScreen extends Component {
       this.setState({loading:true});
       const db = firebase.firestore();
       var uid = this.props.mainStore.uid;
-      // var nid = notifId();
-      // var notifBucket = db.collection('notifications').doc(uid).collection('notifs');
+      var nid = notifId();
+      var notifBucket = db.collection('notifications').doc(uid).collection('notifs');
       var rootRef = this.props.navigation;
       var storeRef = this.props;
       var thisRef = this;
@@ -94,18 +89,18 @@ class RegisterScreen extends Component {
         regTimestamp : + new Date()
       };
 
-      // await registerForPushNotificationsAsync(uid);
+      await registerForPushNotificationsAsync(uid);
 
-      // await notifBucket.doc(nid).set({
-      //   id : nid,
-      //   timestamp : + new Date(),
-      //   read : false,
-      //   content : "Hi "+this.state.fname+", Welcome to the doorzy family. You are one of our first customers and you are special for us. I personally thank you for choosing doorzy as your doorstep delivery companion. Also, we are open to feedbacks and appreciate any kind of feedback or criticism.",
-      //   title : "Welcome aboard!"
-      // }).catch(function(err){
-      //   this.setState({loading:false});
-      //   console.log(err);
-      // });
+      await notifBucket.doc(nid).set({
+        id : nid,
+        timestamp : + new Date(),
+        read : false,
+        content : "Hi "+this.state.fname+", Welcome to the doorzy family. You are one of our first customers and you are special for us. I personally thank you for choosing doorzy as your doorstep delivery companion. Also, we are open to feedbacks and appreciate any kind of feedback or criticism.",
+        title : "Welcome aboard!"
+      }).catch(function(err){
+        this.setState({loading:false});
+        console.log(err);
+      });
 
       await db.collection("inviteCodes").doc(uid).set({code : inviteCode,uid : uid}).then(()=>{
         

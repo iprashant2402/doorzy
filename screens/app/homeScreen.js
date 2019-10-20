@@ -29,11 +29,11 @@ if (Platform.OS !== "web") {
 }
 
 async function goToMenu(id, navigate, title, active, store) {
-  if(active){
+  if (active) {
     let outlet = {
-      id : id,
-      title : title,
-      active : active
+      id: id,
+      title: title,
+      active: active
     };
     await store.setOutlet(outlet);
     navigate.navigate("OutletMenuScreen");
@@ -49,7 +49,7 @@ function OutletItem({ title, active, id, navigate, store, offer, image }) {
         }}
         placeholderStyle={{ backgroundColor: colors.primarySupport }}
         source={{
-          uri : image
+          uri: image
         }}
         size="xlarge"
       />
@@ -64,9 +64,7 @@ function OutletItem({ title, active, id, navigate, store, offer, image }) {
       <Text style={active ? styles.itemActive : styles.itemInactive}>
         {active ? "Open" : "Closed"}
       </Text>
-      <Text style={styles.offer}>
-        {offer>0 ? offer+"% OFF" :  ""}
-      </Text>
+      <Text style={styles.offer}>{offer > 0 ? offer + "% OFF" : ""}</Text>
     </Card>
   );
 }
@@ -141,7 +139,7 @@ class HomeScreen extends Component {
 
   addToCart = async products => {
     this.props.mainStore.setCart(products);
-    await this.props.mainStore.setRoute('HomeScreen');
+    await this.props.mainStore.setRoute("HomeScreen");
     console.log("HOMESCREEN:" + this.props.mainStore.cartCount);
     this.props.navigation.navigate("CartScreen");
   };
@@ -192,11 +190,12 @@ class HomeScreen extends Component {
             marginTop: 30,
             justifyContent: "center",
             alignItems: "center",
-            paddingHorizontal : 20
+            paddingHorizontal: 20
           }}
         >
           <Text style={styles.text1}>
-            We are accepting orders only for doorzy Food Partners after 11:00 PM.
+            We are accepting orders only for doorzy Food Partners after 11:00
+            PM.
           </Text>
         </View>
       );
@@ -239,14 +238,14 @@ class HomeScreen extends Component {
             <Divider style={{ backgroundColor: "transparent", height: 5 }} />
             <ListItem key="offer" subtitle="*Upto INR 100" title="Order from TARA MAA & Get 10% OFF*" leftIcon={{ name: "card-giftcard",color:colors.successButton }}/>
             <Divider style={{ backgroundColor: "transparent", height: 20 }} />*/}
-            {nightDeliveryDisclaimer}
+            {/*{nightDeliveryDisclaimer}*/}
             <Divider style={{ backgroundColor: "transparent", height: 20 }} />
             <View style={styles.originals}>
               <Text style={styles.logoTextPrimary}>
-                d<Text style={styles.logoTextSecondary}>oo</Text>rzy Food Partners
+                Vire<Text style={styles.logoTextSecondary}>Store</Text>
               </Text>
             </View>
-            <FlatList
+            {/*<FlatList
               data={this.state.outlets}
               horizontal={true}
               renderItem={({ item }) => (
@@ -256,12 +255,12 @@ class HomeScreen extends Component {
                   active={item.active}
                   id={item.id}
                   store={this.props.mainStore}
-                  offer={item.offer?item.offer:0}
+                  offer={item.offer ? item.offer : 0}
                   image={item.image}
                 />
               )}
               keyExtractor={item => item.id}
-            />
+              />*/}
             <Divider style={{ backgroundColor: "transparent", height: 20 }} />
             {addProductForm}
             <View style={styles.btnWrapper}>
@@ -341,7 +340,7 @@ const styles = StyleSheet.create({
     fontFamily: "Rubik-Bold",
     fontSize: 15,
     color: colors.successButton,
-    margin: 5,
+    margin: 5
   },
   itemInactive: {
     fontFamily: "Rubik-Regular",
