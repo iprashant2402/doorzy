@@ -1,8 +1,3 @@
-/*
-This View is responsible for displaying form to take user inputs for placing order 
-e.g. what product? which brand? quantity? ....
-*/
-
 import React, { Component } from "react";
 import {
   View,
@@ -45,7 +40,7 @@ async function goToMenu(id, navigate, title, active, store) {
   }
 }
 
-function OutletItem({ title, active, id, navigate, store }) {
+function OutletItem({ title, active, id, navigate, store, offer, image }) {
   return (
     <Card style={styles.outletItem}>
       <Avatar
@@ -53,7 +48,9 @@ function OutletItem({ title, active, id, navigate, store }) {
           goToMenu(id, navigate, title, active, store);
         }}
         placeholderStyle={{ backgroundColor: colors.primarySupport }}
-        title={title[0]}
+        source={{
+          uri : image
+        }}
         size="xlarge"
       />
       <Text
@@ -66,6 +63,9 @@ function OutletItem({ title, active, id, navigate, store }) {
       </Text>
       <Text style={active ? styles.itemActive : styles.itemInactive}>
         {active ? "Open" : "Closed"}
+      </Text>
+      <Text style={styles.offer}>
+        {offer>0 ? offer+"% OFF" :  ""}
       </Text>
     </Card>
   );
@@ -80,11 +80,11 @@ class HomeScreen extends Component {
       products: [
         {
           name: "",
-          // brand: "",
+          brand: "",
           quantity: 1,
-          // preferredShop: "",
+          preferredShop: "",
           id: productId(),
-          // estAmt: 0
+          estAmt: 0
         }
       ],
       time: 10,
@@ -102,11 +102,11 @@ class HomeScreen extends Component {
   addProduct = () => {
     const newProduct = {
       name: "",
-      // brand: "",
+      brand: "",
       quantity: 1,
-      // preferredShop: "",
+      preferredShop: "",
       id: productId(),
-      // estAmt: 0
+      estAmt: 0
     };
     this.setState(prevState => ({
       products: [...prevState.products, newProduct]
@@ -126,10 +126,10 @@ class HomeScreen extends Component {
     tempArray.map(p => {
       if (p.id === product.id) {
         p.name = product.name;
-        // p.brand = product.brand;
+        p.brand = product.brand;
         p.quantity = product.quantity;
-        // p.preferredShop = product.preferredShop;
-        // p.estAmt = product.estAmt;
+        p.preferredShop = product.preferredShop;
+        p.estAmt = product.estAmt;
       } else {
         p = p;
       }
@@ -139,8 +139,9 @@ class HomeScreen extends Component {
     });
   };
 
-  addToCart = products => {
+  addToCart = async products => {
     this.props.mainStore.setCart(products);
+    await this.props.mainStore.setRoute('HomeScreen');
     console.log("HOMESCREEN:" + this.props.mainStore.cartCount);
     this.props.navigation.navigate("CartScreen");
   };
@@ -184,20 +185,21 @@ class HomeScreen extends Component {
   }
 
   render() {
-    // if (this.state.time >= 23 || this.state.time < 9 || false) {
-    //   addProductForm = (
-    //     <View
-    //       style={{
-    //         marginTop: 30,
-    //         justifyContent: "center",
-    //         alignItems: "center"
-    //       }}
-    //     >
-    //       <Text style={styles.text1}>
-    //         We are accepting orders only for Jeetu's Kitchen after 11:00 PM.
-    //       </Text>
-    //     </View>
-    //   );
+    if (this.state.time >= 23 || this.state.time < 9) {
+      addProductForm = (
+        <View
+          style={{
+            marginTop: 30,
+            justifyContent: "center",
+            alignItems: "center",
+            paddingHorizontal : 20
+          }}
+        >
+          <Text style={styles.text1}>
+            We are accepting orders only for doorzy Food Partners after 11:00 PM.
+          </Text>
+        </View>
+      );
       /*nightDeliveryDisclaimer = (
         <View
           style={{
@@ -215,8 +217,8 @@ class HomeScreen extends Component {
           </Text>
         </View>
       );*/
-      // nightDeliveryDisclaimer = null;
-    // } else {
+      nightDeliveryDisclaimer = null;
+    } else {
       addProductForm = this.state.products.map((l, i) => (
         <ProductForm
           id={l.id}
@@ -225,7 +227,7 @@ class HomeScreen extends Component {
         />
       ));
       nightDeliveryDisclaimer = null;
-    // }
+    }
     console.log(this.state.outlets);
     return (
       <View style={styles.container}>
@@ -241,7 +243,7 @@ class HomeScreen extends Component {
             <Divider style={{ backgroundColor: "transparent", height: 20 }} />
             <View style={styles.originals}>
               <Text style={styles.logoTextPrimary}>
-                d<Text style={styles.logoTextSecondary}>oo</Text>rzy ORIGINALS
+                d<Text style={styles.logoTextSecondary}>oo</Text>rzy Food Partners
               </Text>
             </View>
             <FlatList
@@ -254,6 +256,8 @@ class HomeScreen extends Component {
                   active={item.active}
                   id={item.id}
                   store={this.props.mainStore}
+                  offer={item.offer?item.offer:0}
+                  image={item.image}
                 />
               )}
               keyExtractor={item => item.id}
@@ -267,9 +271,7 @@ class HomeScreen extends Component {
                 buttonStyle={styles.btn}
                 titleStyle={styles.btnTitle}
                 type="clear"
-                // changes from true to false and false to true
-                disabled=
-                {
+                disabled={
                   this.state.time >= 23 || this.state.time < 9 ? true : false
                 }
               />
@@ -334,6 +336,12 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: colors.successButton,
     margin: 5
+  },
+  offer: {
+    fontFamily: "Rubik-Bold",
+    fontSize: 15,
+    color: colors.successButton,
+    margin: 5,
   },
   itemInactive: {
     fontFamily: "Rubik-Regular",
