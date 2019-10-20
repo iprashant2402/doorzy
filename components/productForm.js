@@ -67,7 +67,7 @@ export default class ProductForm extends Component {
           <View style={styles.quantityContainer}>
           <Text style={styles.quantitylabel}>Quantity</Text>  
           <View style={styles.inputRowWrapperCustom}>
-          <View style={styles.btnWrapper}>
+          {/* <View style={styles.btnWrapper}>
             <Button
               type="clear"
               buttonStyle={styles.btn}
@@ -80,18 +80,23 @@ export default class ProductForm extends Component {
               }
               onPress = {()=>this.decrementQuantity()}
             />
-          </View>
+          </View> */}
           <View style={styles.quantityWrapper}>
-            <Text style={styles.quantity}>{this.state.quantity}</Text>
+          <TextInput
+              style={styles.input}
+              placeholder="Quantity"
+              value={this.state.quantity}
+            />
+            {/* <Text style={styles.quantity}>{this.state.quantity}</Text> */}
           </View>
-          <View style={styles.btnWrapper}>
+          {/* <View style={styles.btnWrapper}>
             <Button
               type="clear"
               buttonStyle={styles.btn}
               icon={{ name: "add", color: colors.primary }}
               onPress= {()=>this.incrementQuantity()}
             />
-          </View>
+          </View> */}
           </View>
           </View>
         </View>
