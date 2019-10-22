@@ -62,6 +62,10 @@ export default class CartScreen extends Component {
     this.setState({ showModal: visible });
   }
 
+  removeItem = id => {
+    this.props.mainStore.removeItemFromCart(id);
+  }
+
   submitOrder = () => {
     if (!(this.state.address === "") && !(this.props.mainStore.cart.length<1)) {
       this.setState({ showIndicator: true }, () => {
@@ -94,7 +98,7 @@ export default class CartScreen extends Component {
       }
     else{
     productItem = this.props.mainStore.cart.map((l, i) => (
-      <ProductItem product={l} style={styles.productItem} />
+      <ProductItem product={l} key={i} style={styles.productItem} removeItem = {this.removeItem} />
     ));
     var total = 0;
     this.props.mainStore.cart.map((l,i)=>{
@@ -145,7 +149,7 @@ export default class CartScreen extends Component {
                   color={colors.white}
                 />
               }
-              onPress={() => this.props.navigation.goBack()}
+              onPress={() => this.props.navigation.navigate(this.props.mainStore.route)}
             />
           </View>
           <View style={styles.titleContainer}>
@@ -263,7 +267,7 @@ const styles = StyleSheet.create({
   },
   textHeading: {
     fontFamily: "Rubik-Bold",
-    fontSize: 15,
+    fontSize: 20,
     color: colors.text,
     marginBottom: 15,
     marginTop: 35

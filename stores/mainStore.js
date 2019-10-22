@@ -1,3 +1,4 @@
+  
 import { action, observable ,computed} from 'mobx';
 
 class MainStore {
@@ -13,7 +14,7 @@ class MainStore {
 
   @observable isVisibleNotificationsOverlay = false;
 
-  @observable route = 'MyAccountScreen';
+  @observable route = '';
 
   @observable selectedOutlet = {};
 
@@ -58,8 +59,17 @@ class MainStore {
   }
 
   @action setCart(products){
-    this.cart = products
+    this.cart = this.cart.concat(products);
   }
+
+  @action resetCart(){
+    this.cart = [];
+  }
+
+  @action removeItemFromCart(id){
+    this.cart = this.cart.filter(item => item.id !== id);
+  }
+
 }
 
 export const mainStore = new MainStore();
