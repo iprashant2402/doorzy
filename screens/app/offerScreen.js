@@ -63,11 +63,9 @@ class OfferScreen extends Component {
                 <View style={{paddingHorizontal : 20,paddingTop : 20}}>
                 <ListItem key="offer" subtitle="*Offer Valid for Limited Period" title="Buy 1 Milky Mist Yoghurt, Get 1 FREE*" leftIcon={{ name: "card-giftcard",color:colors.successButton }}/>
                 <Divider style={{ backgroundColor: "transparent", height: 5 }} />
-                <ListItem key="offer" subtitle="*Upto INR 100" title="Order from TARA MAA & Get 10% OFF*" leftIcon={{ name: "card-giftcard",color:colors.successButton }}/>
-                <Divider style={{ backgroundColor: "transparent", height: 20 }} />
                 <ListItem key="offer" subtitle="*Upto INR 100" title="Order from TAPRI & Get 20% OFF*" leftIcon={{ name: "card-giftcard",color:colors.successButton }}/>
                 <Divider style={{ backgroundColor: "transparent", height: 20 }} />
-                <ListItem key="offer" subtitle="*Upto INR 100" title="Order from SATVIK & Get 20% OFF*" leftIcon={{ name: "card-giftcard",color:colors.successButton }}/>
+                <ListItem key="offer" subtitle="*Upto INR 100" title="Order from CHINA VALLEY & Get 22% OFF*" leftIcon={{ name: "card-giftcard",color:colors.successButton }}/>
                 <Divider style={{ backgroundColor: "transparent", height: 20 }} />
                 </View>
               </View>
