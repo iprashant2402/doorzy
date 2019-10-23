@@ -17,9 +17,9 @@ export default function AddressItem(props) {
           <Text style={styles.text1}>{props.address.addLine2}</Text>
           <Text style={styles.text1}>{props.address.landmark}</Text>
           
-          {/* <TouchableOpacity style={styles.btn} onPress={()=>removeAddress(props.address.id,props.uid,props.addressArray)}>
+          <TouchableOpacity style={styles.btn} onPress={()=>removeAddress(props.address.id,props.uid,props.addressArray)}>
               <Text style={styles.btnTitle}>REMOVE</Text>
-          </TouchableOpacity> */}
+          </TouchableOpacity>
         </View>
       </View>
     );

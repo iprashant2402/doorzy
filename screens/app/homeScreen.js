@@ -191,12 +191,11 @@ class HomeScreen extends Component {
           style={{
             marginTop: 30,
             justifyContent: "center",
-            alignItems: "center",
-            paddingHorizontal : 20
+            alignItems: "center"
           }}
         >
           <Text style={styles.text1}>
-            We are accepting orders only for doorzy Food Partners after 11:00 PM.
+            We are accepting orders only for Jeetu's Kitchen after 11:00 PM.
           </Text>
         </View>
       );
