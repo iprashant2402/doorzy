@@ -10,7 +10,8 @@ import {
   Platform,
   StyleSheet,
   ScrollView,
-  FlatList
+  FlatList,
+  ActivityIndicator
 } from "react-native";
 import { inject, observer } from "mobx-react/native";
 import firebase from "firebase";
@@ -35,6 +36,7 @@ import {
 import { Notifications } from "expo";
 import * as Permissions from "expo-permissions";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import FoodItem from '../../components/foodItem';
 const productId = require("uuid/v4");
 if (Platform.OS !== "web") {
   window = undefined;
@@ -48,7 +50,8 @@ class OutletMenuScreen extends Component {
     this.state = {
       time: 10,
       menu: [],
-      products: []
+      products: [],
+      showIndicator : true
     };
   }
 
@@ -59,26 +62,114 @@ class OutletMenuScreen extends Component {
     return hours;
   };
 
-  addToCart = products => {
+  addToCart = async products => {
     this.props.mainStore.setCart(products);
+    await this.props.mainStore.setRoute('OutletMenuScreen');
     console.log("HOMESCREEN:" + this.props.mainStore.cartCount);
     this.props.navigation.navigate("CartScreen");
   };
 
+  getProduct = product => {
+    console.log(product);
+    const tempArray = this.state.menu;
+    const tempArray2 = this.state.products;
+    tempArray.map(p => {
+      if (p.id === product.id) {
+        p.quantity = product.quantity;
+      } else {
+        p = p;
+      }
+    });
+    tempArray2.map(p => {
+      if (p.id === product.id) {
+        p.quantity = product.quantity;
+      } else {
+        p = p;
+      }
+    });
+    this.setState({
+      menu: tempArray,
+      products : tempArray2
+    });
+  };
+
+  addProductToArray = product => {
+    const tempArray = this.state.products;
+    product.quantity = product.quantity + 1;
+    tempArray.push(product);
+    this.setState({
+      products : tempArray
+    });
+  }
+
+  alterQuantity = (product, inc) => {
+    const tempArray1 = this.state.products;
+    const tempArray2 = this.state.menu;
+    if(inc)
+      product.quantity = product.quantity + 1;
+    else
+    {
+      if(product.quantity != 0)
+        product.quantity = product.quantity - 1;  
+    }
+    if(product.quantity === 0)
+    {
+      for(var i=0; i<tempArray1.length; i++)
+      {
+        if(tempArray1[i].id === product.id)
+        {
+          tempArray1.splice(i,1);
+        }
+      }  
+    }
+    for(var i=0; i<tempArray1.length; i++)
+    {
+      if(tempArray1[i].id === product.id && product.quantity != 0)
+      tempArray1[i] = product;
+    }
+    for(var i=0; i<tempArray2.length; i++)
+    {
+      if(tempArray2[i].id === product.id)
+      tempArray2[i] = product;
+    }
+    this.setState({
+      products : tempArray1,
+      menu : tempArray2
+    });
+  }
+
   handleSubmit = () => {
     const products = this.state.products;
+    for(var i=0; i<products.length; i++){
+      const brand = this.props.mainStore.selectedOutlet.title;
+      const name = products[i].name;
+      const id = products[i].id;
+      const quantity = products[i].quantity;
+      const cost = products[i].cost * quantity;
+      products[i] = {};
+      products[i].brand = brand;
+      products[i].name = name;
+      products[i].id = id;
+      products[i].quantity = quantity;
+      products[i].amount = cost;
+      products[i].estAmt = cost;
+    }
     this.addToCart(products);
   };
 
   componentDidMount() {
-    console.log("LINE 54 : outletDetails.js");
-    const menuRef = firebase
+    console.log("LINE 54 : outletDetails.js : "+ this.props.mainStore.selectedOutlet.id);
+    const thisRef = this;
+    this.focusListener = this.props.navigation.addListener('didFocus',()=>{
+      this.setState({
+        menu : [],
+        products : []
+      });
+      const menuRef = firebase
       .firestore()
       .collection("menus")
       .doc(this.props.mainStore.selectedOutlet.id)
       .collection("items");
-    const thisRef = this;
-    this.focusListener = this.props.navigation.addListener('didFocus',()=>{
       console.log("MENU SCREEN FOCUSED : LINE 82")
       menuRef.get().then(function(snap) {
         console.log("INSIDE MENUREF.GET() FUNCTION LINE 84 : OUTLETDETAILS.JS");
@@ -93,6 +184,27 @@ class OutletMenuScreen extends Component {
           });
           thisRef.setState({
             menu: foodItems
+          },()=>{
+            thisRef.setState({
+              showIndicator : false
+            });
+            // const tempCart = thisRef.props.mainStore.cart;
+            // console.log("OUTLET DETAILS : LINE 187 :");
+            // console.log(tempCart);
+            // const tempMenu = thisRef.state.menu;
+            // const tempProducts = thisRef.state.products;
+            // for(var i=0;i<tempMenu.length;i++){
+            //   tempCart.forEach(cartItem => {
+            //     if(tempMenu[i].id === cartItem.id){
+            //       //tempProducts.push(cartItem);
+            //       tempMenu[i].quantity = cartItem.quantity;
+            //     }
+            //   })
+            // }
+            // thisRef.setState({
+            //   menu : tempMenu,
+            //   products : tempProducts
+            // },()=>{console.log(thisRef.state.menu)});
           });
         }
       }).catch(err=>console.log(err));
@@ -104,80 +216,12 @@ class OutletMenuScreen extends Component {
     this.focusListener.remove();
   }
 
-  incrementQuantity = () => {
-    this.setState(
-      prevState => ({
-        quantity: prevState.quantity + 1
-      }),
-      () => {
-        this.props.getProduct(this.state);
-      }
-    );
-  };
-
-  decrementQuantity = () => {
-    if (this.state.quantity > 1) {
-      this.setState(
-        prevState => ({
-          quantity: prevState.quantity - 1
-        }),
-        () => {
-          this.props.getProduct(this.state);
-        }
-      );
-    }
-  };
+  
 
   render() {
     const outlet = this.props.mainStore.selectedOutlet;
-    addButton = (
-      <Button
-        title="Add"
-        type="outline"
-        buttonStyle={styles.greenOutline}
-        titleStyle={styles.btnOutlineTitle}
-      />
-    );
-    quantityButton = (
-      <View style={styles.inputRowWrapperCustom}>
-        <View style={styles.btnWrapper}>
-          <Button
-            type="clear"
-            buttonStyle={styles.btn}
-            icon={<Icon type="antdesign" name="minus" color={colors.primary} />}
-            onPress={() => this.decrementQuantity()}
-          />
-        </View>
-        <View style={styles.quantityWrapper}>
-          <Text style={styles.quantity}>{this.state.quantity}</Text>
-        </View>
-        <View style={styles.btnWrapper}>
-          <Button
-            type="clear"
-            buttonStyle={styles.btn}
-            icon={{ name: "add", color: colors.primary }}
-            onPress={() => this.incrementQuantity()}
-          />
-        </View>
-      </View>
-    );
     menuList = this.state.menu.map((l, i) => (
-      <View style={styles.panel}>
-        <View style={styles.itemRow}>
-          <View style={styles.leftWrapper}>
-            <Icon
-              type="material-community"
-              name="checkbox-intermediate"
-              color={l.veg ? colors.successButton : colors.danger}
-            />
-            <Text style={styles.itemName}>{l.name}</Text>
-          </View>
-          <View style={styles.rightWrapper}>
-            {quantityButton}
-          </View>
-        </View>
-        <Text style={styles.itemCost}>Rs.{l.cost}</Text>
-      </View>
+      <FoodItem item={l} key={i} addProductToArray={this.addProductToArray} getProduct={this.getProduct} alterQuantity={this.alterQuantity}/>
     ));
     return (
       <View style={styles.container}>
@@ -197,7 +241,12 @@ class OutletMenuScreen extends Component {
             <View style={{ padding: 20 }}>
               <Text style={styles.menuTitle}>Menu</Text>
             </View>
-            <View>{menuList}</View>
+            <View>
+            <View style={{justifyContent:'center',textAlign:'center',alignContent:'center',alignItems:'center'}}>
+            <ActivityIndicator animating={this.state.showIndicator} size="large" color={colors.primary} />
+            </View>
+            {menuList}
+            </View>
           </ScrollView>
         </KeyboardAwareScrollView>
         <Button
@@ -345,7 +394,7 @@ const styles = StyleSheet.create({
     flexDirection: "row"
   },
   rightWrapper: {
-    flex: 1
+    flex: 2
   },
   inputBox: {
     height: 50,

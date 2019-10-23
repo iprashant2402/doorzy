@@ -66,7 +66,7 @@ export default class ProductForm extends Component {
               style={styles.input}
               placeholder="Quantity"
               value={this.state.quantity}
-              onChangeText = {number => {this.setState({quantity : number},() => {
+              onChangeText = {number => {this.setState({quantity : number.toString()},() => {
                 this.props.getProduct(this.state);
               })}}
             />
