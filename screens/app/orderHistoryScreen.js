@@ -29,7 +29,8 @@ class OrderHistoryScreen extends Component {
     super(props);
     this.state = {
       orders : [],
-      showIndicator : true
+      showIndicator : true,
+      phoneArray : []
     };
   }
 
@@ -48,17 +49,24 @@ class OrderHistoryScreen extends Component {
     return(null);
   }
 
-  /*getDeliveryExecNumber = (order) => {
+  getDeliveryExecNumber = async (order) => {
     if(order.deliveryExecId){
       const deliveryExecRef = firebase.firestore().collection('deliveryExecs').doc(order.deliveryExecId);
-      deliveryExecRef.get().then(function(doc){
+      await deliveryExecRef.get().then(function(doc){
         const exec = doc.data();
-        return("+91-"+exec.phone);
+        return(exec.phone);
       }).catch(err=>console.log(err));
     }else{
       return("Not Assigned");
     }
-  }*/
+  }
+
+  getPhoneNumber = (order) => {
+    if(this.state.phoneArray[order.oid]){
+      return this.state.phoneArray[order.oid];
+    }
+  }
+
 
   getItemAmount = (item) => {
     if(item.amount)
@@ -102,7 +110,24 @@ class OrderHistoryScreen extends Component {
               thisRef.setState({showIndicator:false});
             });
         });
+        this.focusListener = this.props.navigation.addListener('didFocus',()=>{
+          if(!this.state.showIndicator){
+            const phoneArray = [];
+            this.state.orders.forEach((order)=>{
+              phoneArray[order.oid] = this.getDeliveryExecNumber(order);
+            });
+            this.setState({
+              phoneArray : phoneArray
+            })
+          }
+        });
   }
+
+  componentWillUnmount() {
+    // Remove the event listener
+    this.focusListener.remove();
+  }
+
   render() {
 
     ordersList = this.state.orders.map((l,i)=>(
@@ -126,7 +151,7 @@ class OrderHistoryScreen extends Component {
          </View>
          {this.getTotal(l)}
          <View style={styles.timeWrapper}>
-            <Text style={styles.status}>STATUS : {l.statusCode}</Text>
+            <Text style={styles.status}>{this.getPhoneNumber(l)}STATUS : {l.statusCode}</Text>
          </View>
          {this.showPaymentLink(l)} 
          {this.getPaymentStatus(l)}

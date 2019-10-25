@@ -104,7 +104,7 @@ class HomeScreen extends Component {
     }
   };
 
-  addProduct = () => {
+  addProduct = async () => {
     const newProduct = {
       name: "",
       brand: "",
@@ -113,9 +113,9 @@ class HomeScreen extends Component {
       id: productId(),
       estAmt: 0
     };
-    this.setState(prevState => ({
-      products: [...prevState.products, newProduct]
-    }));
+     this.setState(prevState => ({
+       products: [...prevState.products, newProduct]
+     }));
     console.log(this.state.time);
   };
 
@@ -145,6 +145,9 @@ class HomeScreen extends Component {
   };
 
   addToCart = async products => {
+    this.props.mainStore.cart.forEach(function(item){
+      products = products.filter(product => product.id !== item.id);
+    });
     this.props.mainStore.setCart(products);
     await this.props.mainStore.setRoute('HomeScreen');
     console.log("HOMESCREEN:" + this.props.mainStore.cartCount);
@@ -175,7 +178,11 @@ class HomeScreen extends Component {
       if (snap) {
         const outletsTemp = [];
         snap.forEach(function(doc) {
-          outletsTemp.push(doc.data());
+          outletsTemp.push(doc.data()); 
+        });
+        outletsTemp.sort(function(x,y)
+        {
+          return (x.active === y.active) ? 0 : x.active? -1 : 1; 
         });
         thisRef.setState(
           {

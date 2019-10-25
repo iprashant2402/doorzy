@@ -60,6 +60,19 @@ class MainStore {
   @action setCart(products){
     this.cart = this.cart.concat(products);
   }
+  
+  @action addProductToCart(product){
+    this.cart = this.cart.push(product);
+  }
+
+  @action alterQuantity(index,inc){
+    if(inc){
+      this.cart[index].quantity = this.cart[index].quantity + 1;
+    }
+    else{
+      this.cart[index].quantity = this.cart[index].quantity - 1;
+    }
+  }
 
   @action resetCart(){
     this.cart = [];

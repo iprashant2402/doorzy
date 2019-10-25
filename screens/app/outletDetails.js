@@ -63,6 +63,8 @@ class OutletMenuScreen extends Component {
   };
 
   addToCart = async products => {
+    console.log("LINE 66 outlet Details");
+    console.log(products);
     this.props.mainStore.setCart(products);
     await this.props.mainStore.setRoute('OutletMenuScreen');
     console.log("HOMESCREEN:" + this.props.mainStore.cartCount);
@@ -105,12 +107,30 @@ class OutletMenuScreen extends Component {
   alterQuantity = (product, inc) => {
     const tempArray1 = this.state.products;
     const tempArray2 = this.state.menu;
-    if(inc)
+    const cart = this.props.mainStore.cart;
+    var found = false;
+    var item_index = 0;
+    for(var i=0;i<cart.length;i++){
+      if(cart[i].id===product.id){
+          found = true;
+          item_index = i;
+          break;
+      }
+    }
+    if(inc){
       product.quantity = product.quantity + 1;
+      if(found){
+        this.props.mainStore.alterQuantity(item_index,true);  
+      }
+    }
     else
     {
-      if(product.quantity != 0)
-        product.quantity = product.quantity - 1;  
+      if(product.quantity != 0){
+        product.quantity = product.quantity - 1;
+        if(found){
+          this.props.mainStore.alterQuantity(item_index,false);  
+        }  
+      }
     }
     if(product.quantity === 0)
     {
@@ -120,6 +140,9 @@ class OutletMenuScreen extends Component {
         {
           tempArray1.splice(i,1);
         }
+      }
+      if(found){
+        this.props.mainStore.removeItemFromCart(product.id);  
       }  
     }
     for(var i=0; i<tempArray1.length; i++)
@@ -179,8 +202,24 @@ class OutletMenuScreen extends Component {
           snap.forEach(function(doc) {
             foodItems.push(doc.data());
           });
+          foodItems.sort(function(a, b){
+            if(a.name < b.name) { return -1; }
+            if(a.name > b.name) { return 1; }
+            return 0;
+        });
           foodItems.forEach(function(item) {
-            item.quantity = 0;
+            const cart = thisRef.props.mainStore.cart;
+            var found = false;
+            for(var i=0;i<cart.length;i++){
+              if(cart[i].id===item.id){
+                item.quantity = cart[i].quantity;
+                found = true;
+                break;
+              }
+            }
+            if(!found){
+              item.quantity = 0;
+            }
           });
           thisRef.setState({
             menu: foodItems

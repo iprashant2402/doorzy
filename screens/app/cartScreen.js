@@ -32,7 +32,7 @@ export default class CartScreen extends Component {
     this.state = {
       products: [],
       couponCode: "NILL",
-      address: "",
+      address: undefined,
       showIndicator: false,
       showModal: false
     };
@@ -133,9 +133,6 @@ export default class CartScreen extends Component {
         </TouchableOpacity>
       ));
     } else {
-      this.setState({
-        address : undefined
-      });
       addressComponent = <View style={styles.generalTextWrapper}>
         <Text style={styles.text1}>You don't have any saved address.</Text>
         </View>;
