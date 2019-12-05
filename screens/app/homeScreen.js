@@ -197,7 +197,7 @@ class HomeScreen extends Component {
   }
 
   render() {
-    if (this.state.time >= 23 || this.state.time < 9) {
+    if (false) {
       addProductForm = (
         <View
           style={{
@@ -283,9 +283,9 @@ class HomeScreen extends Component {
                 buttonStyle={styles.btn}
                 titleStyle={styles.btnTitle}
                 type="clear"
-                disabled={
-                  this.state.time >= 23 || this.state.time < 9 ? true : false
-                }
+                // disabled={
+                //   this.state.time >= 23 || this.state.time < 9 ? true : false
+                // }
               />
             </View>
           </ScrollView>
