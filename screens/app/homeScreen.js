@@ -197,7 +197,7 @@ class HomeScreen extends Component {
   }
 
   render() {
-    if (this.state.time >= 22 || this.state.time < 9) {
+    if (this.state.time >= 4 && this.state.time < 9) {
       addProductForm = (
         <View
           style={{
@@ -211,7 +211,7 @@ class HomeScreen extends Component {
             We are accepting orders only for doorzy Food Partners after 11:00 PM.
           </Text> */}
           <Text style={styles.text1}>
-           Sorry, our app is currently under maintainance. We will be back live tommorow.
+           Sorry, we are closed for now. We will be back live at 9 am.
           </Text>
         </View>
       );
@@ -287,7 +287,7 @@ class HomeScreen extends Component {
                 titleStyle={styles.btnTitle}
                 type="clear"
                 disabled={
-                  this.state.time >= 22 || this.state.time < 9 ? true : false
+                  this.state.time >= 4 && this.state.time < 9 ? true : false
                 }
               />
             </View>
