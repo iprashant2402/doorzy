@@ -192,11 +192,11 @@ export default class CartScreen extends Component {
           </View>
           {addressComponent}
           <View style={styles.generalTextWrapper}>
-          <Button title='ADD NEW ADDRESS' onPress={()=>{this.props.mainStore.setRoute("CartScreen");console.log(this.props.mainStore.route);this.props.navigation.navigate('AddLocationScreen')}} buttonStyle={{marginTop : 20,borderColor:colors.successButton}} type='outline' icon={{name:'add-location',color:colors.successButton}} titleStyle={{color:colors.successButton}}/>
+          <Button title='ADD NEW ADDRESS' onPress={()=>{this.props.mainStore.setRoute("CartScreen");console.log(this.props.mainStore.route);this.props.navigation.navigate('AddLocationScreen')}} buttonStyle={{marginTop : 20,borderColor:colors.successButton,borderWidth:2}} type='outline' icon={{name:'add-location',color:colors.successButton}} titleStyle={{color:colors.successButton,fontWeight: 'bold'}}/>
           </View>
         </ScrollView>
         <Button
-          title="PLACE ORDER"
+          title="Place Order"
           buttonStyle={styles.btn}
           titleStyle={styles.btnTitle}
           type="solid"
@@ -219,7 +219,7 @@ const styles = StyleSheet.create({
     color : colors.text
   },
   selectedAddress: {
-    backgroundColor: "#f1ecf6",
+    backgroundColor: "#e7f3f7",
     padding: 20,
     borderBottomColor: colors.greyBorder,
     borderBottomWidth: 1
@@ -311,13 +311,13 @@ const styles = StyleSheet.create({
     marginBottom: 10
   },
   btn: {
-    backgroundColor: colors.primarySupport,
+    backgroundColor: colors.brandPrimary,
     borderRadius: 0,
     height: 50
   },
   btnTitle: {
-    fontFamily: "Rubik-Regular",
-    color: colors.white
+    color: colors.white,
+    fontWeight: 'bold'
   },
   error: {
     color: colors.errorMessage

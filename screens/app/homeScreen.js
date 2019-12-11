@@ -24,6 +24,7 @@ import {
 import { colors } from "../../colors/colors";
 import { HeaderComponent } from "../../components/header";
 import ProductForm from "../../components/productForm";
+import ProductFormUpdate from "../../components/productFormUpdate";
 import { Button, Divider, ListItem, Avatar, Card } from "react-native-elements";
 import { Notifications } from "expo";
 import * as Permissions from "expo-permissions";
@@ -34,11 +35,11 @@ if (Platform.OS !== "web") {
 }
 
 async function goToMenu(id, navigate, title, active, store) {
-  if(active){
+  if (active) {
     let outlet = {
-      id : id,
-      title : title,
-      active : active
+      id: id,
+      title: title,
+      active: active
     };
     await store.setOutlet(outlet);
     navigate.navigate("OutletMenuScreen");
@@ -47,14 +48,18 @@ async function goToMenu(id, navigate, title, active, store) {
 
 function OutletItem({ title, active, id, navigate, store, offer, image }) {
   return (
-    <Card style={styles.outletItem}>
+    <Card
+      style={styles.outletItem}
+      wrapperStyle={styles.outletItemWrapper}
+      containerStyle={styles.outletItemWrapper}
+    >
       <Avatar
         onPress={() => {
           goToMenu(id, navigate, title, active, store);
         }}
-        placeholderStyle={{ backgroundColor: colors.primarySupport }}
+        placeholderStyle={{ backgroundColor: colors.primary }}
         source={{
-          uri : image
+          uri: image
         }}
         size="xlarge"
       />
@@ -69,9 +74,7 @@ function OutletItem({ title, active, id, navigate, store, offer, image }) {
       <Text style={active ? styles.itemActive : styles.itemInactive}>
         {active ? "Open" : "Closed"}
       </Text>
-      <Text style={styles.offer}>
-        {offer>0 ? offer+"% OFF" :  ""}
-      </Text>
+      <Text style={styles.offer}>{offer > 0 ? offer + "% OFF" : ""}</Text>
     </Card>
   );
 }
@@ -113,9 +116,9 @@ class HomeScreen extends Component {
       id: productId(),
       estAmt: 0
     };
-     this.setState(prevState => ({
-       products: [...prevState.products, newProduct]
-     }));
+    this.setState(prevState => ({
+      products: [...prevState.products, newProduct]
+    }));
     console.log(this.state.time);
   };
 
@@ -144,12 +147,28 @@ class HomeScreen extends Component {
     });
   };
 
+  checkItemUpdate(item,product){
+    if(product.id === item.id){
+      if(product.name !== item.name || product.quantity !== item.quantity){
+        this.props.mainStore.removeItemFromCart(item.id);
+        return true;
+      }
+      else{
+        return false;
+      }
+    }
+    else{
+      return true;
+    }
+  }
+
   addToCart = async products => {
-    this.props.mainStore.cart.forEach(function(item){
-      products = products.filter(product => product.id !== item.id);
+    const thisRef = this;
+    this.props.mainStore.cart.forEach(function(item) {
+      products = products.filter(product => thisRef.checkItemUpdate(item,product));
     });
     this.props.mainStore.setCart(products);
-    await this.props.mainStore.setRoute('HomeScreen');
+    await this.props.mainStore.setRoute("HomeScreen");
     console.log("HOMESCREEN:" + this.props.mainStore.cartCount);
     this.props.navigation.navigate("CartScreen");
   };
@@ -178,11 +197,10 @@ class HomeScreen extends Component {
       if (snap) {
         const outletsTemp = [];
         snap.forEach(function(doc) {
-          outletsTemp.push(doc.data()); 
+          outletsTemp.push(doc.data());
         });
-        outletsTemp.sort(function(x,y)
-        {
-          return (x.active === y.active) ? 0 : x.active? -1 : 1; 
+        outletsTemp.sort(function(x, y) {
+          return x.active === y.active ? 0 : x.active ? -1 : 1;
         });
         thisRef.setState(
           {
@@ -197,21 +215,21 @@ class HomeScreen extends Component {
   }
 
   render() {
-    if (this.state.time >= 4 && this.state.time < 9) {
+    if (this.state.time >= 5 && this.state.time < 9) {
       addProductForm = (
         <View
           style={{
             marginTop: 30,
             justifyContent: "center",
             alignItems: "center",
-            paddingHorizontal : 20
+            paddingHorizontal: 20
           }}
         >
           {/* <Text style={styles.text1}>
             We are accepting orders only for doorzy Food Partners after 11:00 PM.
           </Text> */}
           <Text style={styles.text1}>
-           Sorry, we are closed for now. We will be back live at 9 am.
+            Sorry, we are closed for now. We will be back live at 9 am.
           </Text>
         </View>
       );
@@ -235,7 +253,7 @@ class HomeScreen extends Component {
       nightDeliveryDisclaimer = null;
     } else {
       addProductForm = this.state.products.map((l, i) => (
-        <ProductForm
+        <ProductFormUpdate
           id={l.id}
           removeProduct={this.removeProduct}
           getProduct={this.getProduct}
@@ -258,7 +276,8 @@ class HomeScreen extends Component {
             <Divider style={{ backgroundColor: "transparent", height: 20 }} />
             <View style={styles.originals}>
               <Text style={styles.logoTextPrimary}>
-                d<Text style={styles.logoTextSecondary}>oo</Text>rzy Food Partners
+                d<Text style={styles.logoTextSecondary}>oo</Text>rzy Food
+                Partners
               </Text>
             </View>
             <FlatList
@@ -271,34 +290,46 @@ class HomeScreen extends Component {
                   active={item.active}
                   id={item.id}
                   store={this.props.mainStore}
-                  offer={item.offer?item.offer:0}
+                  offer={item.offer ? item.offer : 0}
                   image={item.image}
                 />
               )}
               keyExtractor={item => item.id}
             />
             <Divider style={{ backgroundColor: "transparent", height: 20 }} />
-            {addProductForm}
-            <View style={styles.btnWrapper}>
-              <Button
-                title="ADD MORE ITEMS"
-                onPress={() => this.addProduct()}
-                buttonStyle={styles.btn}
-                titleStyle={styles.btnTitle}
-                type="clear"
-                disabled={
-                  this.state.time >= 4 && this.state.time < 9 ? true : false
-                }
-              />
+            <View style={styles.originals}>
+              <Text style={styles.text1}>
+                What do you want to buy?
+              </Text>
             </View>
+            <Divider style={{ backgroundColor: "transparent", height: 20 }} />
+            {addProductForm}
+            <View style={styles.btnWrapper}></View>
           </ScrollView>
         </KeyboardAwareScrollView>
-        <Button
-          title="PROCEED TO CART"
-          buttonStyle={styles.orderbtn}
-          type="solid"
-          onPress={() => this.handleSubmit()}
-        />
+        <View style={styles.flexContainer}>
+          <View style={styles.flexOne}>
+            <Button
+              title="Add new item"
+              onPress={() => this.addProduct()}
+              buttonStyle={styles.btn}
+              titleStyle={styles.btnTitle}
+              type="clear"
+              disabled={
+                this.state.time >= 5 && this.state.time < 9 ? true : false
+              }
+            />
+          </View>
+          <View style={styles.flexOne}>
+            <Button
+              title="Proceed to cart"
+              buttonStyle={styles.orderbtn}
+              type="solid"
+              titleStyle={styles.orderbtnTitle}
+              onPress={() => this.handleSubmit()}
+            />
+          </View>
+        </View>
       </View>
     );
   }
@@ -335,15 +366,32 @@ const styles = StyleSheet.create({
   headerLeftButton: {
     padding: 5
   },
+  flexContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: colors.white
+  },
+  flexOne: {
+    flex: 1,
+  },
+
+  flexTwo: {
+    flex: 2,
+    alignItems: "center",
+    justifyContent: "center"
+  },
   outletItem: {
     alignContent: "center",
     justifyContent: "center",
     textAlign: "center"
   },
+  outletItemWrapper: {
+    backgroundColor: colors.white,
+  },
   itemTitle: {
     fontFamily: "Rubik-Bold",
     fontSize: 15,
-    color: colors.brandPrimary,
+    color: colors.primary,
     margin: 5
   },
   itemActive: {
@@ -356,7 +404,7 @@ const styles = StyleSheet.create({
     fontFamily: "Rubik-Bold",
     fontSize: 15,
     color: colors.successButton,
-    margin: 5,
+    margin: 5
   },
   itemInactive: {
     fontFamily: "Rubik-Regular",
@@ -367,8 +415,8 @@ const styles = StyleSheet.create({
   originals: {},
   text1: {
     fontFamily: "Rubik-Bold",
-    fontSize: 15,
-    color: colors.text,
+    fontSize: 20,
+    color: colors.primary,
     margin: 5
   },
   textPrimary: {
@@ -382,11 +430,20 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: colors.greyBackground
+    backgroundColor: colors.white
   },
   orderbtn: {
-    backgroundColor: colors.brandPrimary,
+    backgroundColor: colors.successButton,
     borderRadius: 0,
+    marginVertical: 0,
+    height: 50,
+  },
+  btn: {
+    backgroundColor: colors.brandPrimary,
+    borderWidth: 2,
+    borderColor: colors.brandPrimary,
+    borderRadius: 0,
+    marginVertical: 0,
     height: 50
   },
   logoTextPrimary: {
@@ -402,7 +459,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20
   },
   btnTitle: {
-    color: colors.successButton
+    color: colors.white,
+    fontWeight: 'bold'
+  },
+  orderbtnTitle: {
+    color: colors.white,
+    fontWeight: 'bold'
   },
   btnWrapper: {
     padding: 20,

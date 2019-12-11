@@ -7,7 +7,7 @@ import {
   TouchableOpacity
 } from "react-native-gesture-handler";
 
-export default class ProductForm extends Component {
+export default class ProductFormUpdate extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -51,56 +51,39 @@ export default class ProductForm extends Component {
 
   render() {
     return (
-      <View style={styles.container&&styles.orderItem}>
+      <View style={styles.container}>
+        <View style={styles.orderItem}>
         <View style={styles.inputRowWrapper}>
-          <View style={styles.quantityContainer}>
-            <Text style={styles.formText}> <Text style={{color:colors.danger}}>*</Text>What do you want to buy?</Text>
+          <View style={styles.flexThree}>
             <TextInput
-              style={styles.input}
-              placeholder="Maggi, Facewash, Ice-cream etc."
+              style={styles.input&&styles.productName}
+              placeholder="Product Name"
               value={this.state.name}
               onChangeText = {text => {this.setState({name : text},() => {
                 this.props.getProduct(this.state);
               })}}
             />
           </View>
+          <View style={styles.flexOne}>
+              <Text style={{fontWeight:'bold',color:colors.primary}}>X</Text>
+          </View>
           <View style={styles.quantityContainer}>
-          <Text style={styles.quantitylabel}>Quantity</Text>  
-          <View style={styles.inputRowWrapperCustom}>
-          <View style={styles.btnWrapper}>
-            <Button
-              type="clear"
-              buttonStyle={styles.btn}
-              icon={
-                <Icon
-                  type="antdesign"
-                  name="minus"
-                  color={colors.primary}
-                />
-              }
-              onPress = {()=>this.decrementQuantity()}
+            <TextInput
+              style={styles.input}
+              placeholder="Quantity"
+              keyboardType="numeric"
+              value={this.state.quantity}
+              onChangeText = {text => {this.setState({quantity : text},() => {
+                this.props.getProduct(this.state);
+              })}}
             />
-          </View>
-          <View style={styles.quantityWrapper}>
-            <Text style={styles.quantity}>{this.state.quantity}</Text>
-          </View>
-          <View style={styles.btnWrapper}>
-            <Button
-              type="clear"
-              buttonStyle={styles.btn}
-              icon={{ name: "add", color: colors.primary }}
-              onPress= {()=>this.incrementQuantity()}
-            />
-          </View>
-          </View>
           </View>
         </View>
         <View style={styles.inputRowWrapper}>
           <View style={styles.quantityContainer}>
-          <Text style={styles.formText}> Brand <Text style={styles.txt}></Text></Text>
             <TextInput
               style={styles.input}
-              placeholder="Lays, Gillete, Marlboro etc."
+              placeholder="Brand(optional)"
               value={this.state.brand}
               onChangeText = {text => {this.setState({brand : text},() => {
                 this.props.getProduct(this.state);
@@ -108,10 +91,9 @@ export default class ProductForm extends Component {
             />
           </View>
           <View style={styles.quantityContainer}>
-          <Text style={styles.formText}> Preferred Shop <Text style={styles.txt}></Text></Text>
             <TextInput
               style={styles.input}
-              placeholder="Tara Maa, All Mart, Limra etc."
+              placeholder="Preferred Shop(optional)"
               value={this.state.preferredShop}
               onChangeText = {text => {this.setState({preferredShop : text},() => {
                 this.props.getProduct(this.state);
@@ -120,11 +102,10 @@ export default class ProductForm extends Component {
           </View>
         </View>
         <View style={styles.inputRowWrapper}>
-          <View style={styles.estAmtWrapper}>
-          <Text style={styles.formText}> Estimated Cost</Text>
+          <View style={styles.quantityContainer}>
             <TextInput
               style={styles.inputBox}
-              placeholder="0.00 Cost per Item"
+              placeholder="Estimated Cost per item"
               keyboardType="numeric"
               value={this.state.estAmt}
               onChangeText = {text => {this.setState({estAmt : text},() => {
@@ -144,24 +125,31 @@ export default class ProductForm extends Component {
           </View>
         </View>
       </View>
+      </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+    padding: 10
+  },
+  productName: {
+    fontSize: 20,
+    fontWeight: 'bold'
   },
   inputBox: {
-    height: 50,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.greyBorder,
-    //padding: 10
+    height: 30,
+    borderBottomWidth: 0,
+    fontWeight: 'bold',
+    fontSize: 10
   },
   input: {
-    height: 50,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.greyBorder
+    height: 30,
+    borderBottomWidth: 0,
+    fontWeight: 'bold',
+    fontSize: 10
   },
   inputWrapper: {
     margin: 10
@@ -186,7 +174,14 @@ const styles = StyleSheet.create({
   },
   quantityContainer : {
     flex : 1,
-    marginHorizontal : 7.5,
+  },
+  flexOne : {
+    flex : 1,
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  flexThree : {
+    flex : 2,
   },
   quantitylabel : {
     textAlign: "center",
@@ -225,7 +220,15 @@ const styles = StyleSheet.create({
     marginBottom : 10,
     backgroundColor : colors.white,
     padding : 5,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.greyBorder
+    borderRadius: 10,
+    shadowColor: '#D0CFCF',
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowRadius: 2,
+    shadowOpacity: 1.0,
+    borderTopColor: colors.primary,
+    borderTopWidth: 4
   },
 });
