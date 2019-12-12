@@ -23,6 +23,7 @@ import {
   createSwitchNavigator
 } from "react-navigation";
 import { colors } from "../../colors/colors";
+import { categories } from "../../util/categoriesDB";
 import { HeaderComponent } from "../../components/header";
 import ProductForm from "../../components/productForm";
 import {
@@ -36,10 +37,28 @@ import {
 import { Notifications } from "expo";
 import * as Permissions from "expo-permissions";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import FoodItem from '../../components/foodItem';
+import FoodItem from "../../components/foodItem";
 const productId = require("uuid/v4");
 if (Platform.OS !== "web") {
   window = undefined;
+}
+
+function CatItem({cat, items, addProductToArray, getProduct, alterQuantity}){
+  menuList = items.map((l,i)=>(
+    <FoodItem
+         item={l}
+         key={i}
+         addProductToArray={addProductToArray}
+         getProduct={getProduct}
+         alterQuantity={alterQuantity}
+       />
+  ));
+  return(
+    <View style={styles.itemRow&&styles.paddingScore}>
+      <Text style={styles.catTitle}>{categories[cat].toUpperCase()}</Text>
+      {menuList}
+    </View>
+  );
 }
 
 @inject("mainStore")
@@ -51,7 +70,7 @@ class OutletMenuScreen extends Component {
       time: 10,
       menu: [],
       products: [],
-      showIndicator : true
+      showIndicator: true
     };
   }
 
@@ -66,7 +85,7 @@ class OutletMenuScreen extends Component {
     console.log("LINE 66 outlet Details");
     console.log(products);
     this.props.mainStore.setCart(products);
-    await this.props.mainStore.setRoute('OutletMenuScreen');
+    await this.props.mainStore.setRoute("OutletMenuScreen");
     console.log("HOMESCREEN:" + this.props.mainStore.cartCount);
     this.props.navigation.navigate("CartScreen");
   };
@@ -91,7 +110,7 @@ class OutletMenuScreen extends Component {
     });
     this.setState({
       menu: tempArray,
-      products : tempArray2
+      products: tempArray2
     });
   };
 
@@ -100,9 +119,9 @@ class OutletMenuScreen extends Component {
     product.quantity = product.quantity + 1;
     tempArray.push(product);
     this.setState({
-      products : tempArray
+      products: tempArray
     });
-  }
+  };
 
   alterQuantity = (product, inc) => {
     const tempArray1 = this.state.products;
@@ -110,60 +129,52 @@ class OutletMenuScreen extends Component {
     const cart = this.props.mainStore.cart;
     var found = false;
     var item_index = 0;
-    for(var i=0;i<cart.length;i++){
-      if(cart[i].id===product.id){
-          found = true;
-          item_index = i;
-          break;
+    for (var i = 0; i < cart.length; i++) {
+      if (cart[i].id === product.id) {
+        found = true;
+        item_index = i;
+        break;
       }
     }
-    if(inc){
+    if (inc) {
       product.quantity = product.quantity + 1;
-      if(found){
-        this.props.mainStore.alterQuantity(item_index,true);  
+      if (found) {
+        this.props.mainStore.alterQuantity(item_index, true);
       }
-    }
-    else
-    {
-      if(product.quantity != 0){
+    } else {
+      if (product.quantity != 0) {
         product.quantity = product.quantity - 1;
-        if(found){
-          this.props.mainStore.alterQuantity(item_index,false);  
-        }  
-      }
-    }
-    if(product.quantity === 0)
-    {
-      for(var i=0; i<tempArray1.length; i++)
-      {
-        if(tempArray1[i].id === product.id)
-        {
-          tempArray1.splice(i,1);
+        if (found) {
+          this.props.mainStore.alterQuantity(item_index, false);
         }
       }
-      if(found){
-        this.props.mainStore.removeItemFromCart(product.id);  
-      }  
     }
-    for(var i=0; i<tempArray1.length; i++)
-    {
-      if(tempArray1[i].id === product.id && product.quantity != 0)
-      tempArray1[i] = product;
+    if (product.quantity === 0) {
+      for (var i = 0; i < tempArray1.length; i++) {
+        if (tempArray1[i].id === product.id) {
+          tempArray1.splice(i, 1);
+        }
+      }
+      if (found) {
+        this.props.mainStore.removeItemFromCart(product.id);
+      }
     }
-    for(var i=0; i<tempArray2.length; i++)
-    {
-      if(tempArray2[i].id === product.id)
-      tempArray2[i] = product;
+    for (var i = 0; i < tempArray1.length; i++) {
+      if (tempArray1[i].id === product.id && product.quantity != 0)
+        tempArray1[i] = product;
+    }
+    for (var i = 0; i < tempArray2.length; i++) {
+      if (tempArray2[i].id === product.id) tempArray2[i] = product;
     }
     this.setState({
-      products : tempArray1,
-      menu : tempArray2
+      products: tempArray1,
+      menu: tempArray2
     });
-  }
+  };
 
   handleSubmit = () => {
     const products = this.state.products;
-    for(var i=0; i<products.length; i++){
+    for (var i = 0; i < products.length; i++) {
       const brand = this.props.mainStore.selectedOutlet.title;
       const name = products[i].name;
       const id = products[i].id;
@@ -181,72 +192,88 @@ class OutletMenuScreen extends Component {
   };
 
   componentDidMount() {
-    console.log("LINE 54 : outletDetails.js : "+ this.props.mainStore.selectedOutlet.id);
+    console.log(
+      "LINE 54 : outletDetails.js : " + this.props.mainStore.selectedOutlet.id
+    );
     const thisRef = this;
-    this.focusListener = this.props.navigation.addListener('didFocus',()=>{
+    this.focusListener = this.props.navigation.addListener("didFocus", () => {
       this.setState({
-        menu : [],
-        products : []
+        menu: [],
+        products: []
       });
       const menuRef = firebase
-      .firestore()
-      .collection("menus")
-      .doc(this.props.mainStore.selectedOutlet.id)
-      .collection("items");
-      console.log("MENU SCREEN FOCUSED : LINE 82")
-      menuRef.get().then(function(snap) {
-        console.log("INSIDE MENUREF.GET() FUNCTION LINE 84 : OUTLETDETAILS.JS");
-        if (snap) {
-          console.log("INSIDE MENUREF.GET() FUNCTION LINE 86(SNAP IS PRESENT) : OUTLETDETAILS.JS");
-          const foodItems = [];
-          snap.forEach(function(doc) {
-            foodItems.push(doc.data());
-          });
-          foodItems.sort(function(a, b){
-            if(a.name < b.name) { return -1; }
-            if(a.name > b.name) { return 1; }
-            return 0;
-        });
-          foodItems.forEach(function(item) {
-            const cart = thisRef.props.mainStore.cart;
-            var found = false;
-            for(var i=0;i<cart.length;i++){
-              if(cart[i].id===item.id){
-                item.quantity = cart[i].quantity;
-                found = true;
-                break;
-              }
-            }
-            if(!found){
-              item.quantity = 0;
-            }
-          });
-          thisRef.setState({
-            menu: foodItems
-          },()=>{
-            thisRef.setState({
-              showIndicator : false
+        .firestore()
+        .collection("menus")
+        .doc(this.props.mainStore.selectedOutlet.id)
+        .collection("items");
+      console.log("MENU SCREEN FOCUSED : LINE 82");
+      menuRef
+        .get()
+        .then(function(snap) {
+          console.log(
+            "INSIDE MENUREF.GET() FUNCTION LINE 84 : OUTLETDETAILS.JS"
+          );
+          if (snap) {
+            console.log(
+              "INSIDE MENUREF.GET() FUNCTION LINE 86(SNAP IS PRESENT) : OUTLETDETAILS.JS"
+            );
+            const foodItems = [];
+            snap.forEach(function(doc) {
+              foodItems.push(doc.data());
             });
-            // const tempCart = thisRef.props.mainStore.cart;
-            // console.log("OUTLET DETAILS : LINE 187 :");
-            // console.log(tempCart);
-            // const tempMenu = thisRef.state.menu;
-            // const tempProducts = thisRef.state.products;
-            // for(var i=0;i<tempMenu.length;i++){
-            //   tempCart.forEach(cartItem => {
-            //     if(tempMenu[i].id === cartItem.id){
-            //       //tempProducts.push(cartItem);
-            //       tempMenu[i].quantity = cartItem.quantity;
-            //     }
-            //   })
-            // }
-            // thisRef.setState({
-            //   menu : tempMenu,
-            //   products : tempProducts
-            // },()=>{console.log(thisRef.state.menu)});
-          });
-        }
-      }).catch(err=>console.log(err));
+            foodItems.sort(function(a, b) {
+              if (a.name < b.name) {
+                return -1;
+              }
+              if (a.name > b.name) {
+                return 1;
+              }
+              return 0;
+            });
+            foodItems.forEach(function(item) {
+              const cart = thisRef.props.mainStore.cart;
+              var found = false;
+              for (var i = 0; i < cart.length; i++) {
+                if (cart[i].id === item.id) {
+                  item.quantity = cart[i].quantity;
+                  found = true;
+                  break;
+                }
+              }
+              if (!found) {
+                item.quantity = 0;
+              }
+            });
+            thisRef.setState(
+              {
+                menu: foodItems
+              },
+              () => {
+                thisRef.setState({
+                  showIndicator: false
+                });
+                // const tempCart = thisRef.props.mainStore.cart;
+                // console.log("OUTLET DETAILS : LINE 187 :");
+                // console.log(tempCart);
+                // const tempMenu = thisRef.state.menu;
+                // const tempProducts = thisRef.state.products;
+                // for(var i=0;i<tempMenu.length;i++){
+                //   tempCart.forEach(cartItem => {
+                //     if(tempMenu[i].id === cartItem.id){
+                //       //tempProducts.push(cartItem);
+                //       tempMenu[i].quantity = cartItem.quantity;
+                //     }
+                //   })
+                // }
+                // thisRef.setState({
+                //   menu : tempMenu,
+                //   products : tempProducts
+                // },()=>{console.log(thisRef.state.menu)});
+              }
+            );
+          }
+        })
+        .catch(err => console.log(err));
     });
   }
 
@@ -255,13 +282,54 @@ class OutletMenuScreen extends Component {
     this.focusListener.remove();
   }
 
-  
+  categorize = (items, key) => {
+    // get unique values for grouping key
+    const unique = [...new Set(items.map(item => item[key]))];
+
+    // will be ascending by default
+    unique.sort();
+
+    // sorting all of the results by title field
+    const sortFn = (a, b) => a.name > b.name;
+
+    const sortItems = val => {
+      // filters the result set to items sharing the current group field value
+      let sorted = items.filter(item => item[key] === val);
+      // sort by title
+      sorted.sort(sortFn);
+      return sorted;
+    };
+
+    // reduce to a Map (which preserves insertion order and maintains the group key sorting)
+    return unique.reduce((map, cur) => map.set(cur, sortItems(cur)), new Map());
+  };
+
+  renderMenu = () => {
+    const categorizedMenu = this.categorize(this.state.menu,'cid');
+    const temp = [];
+    for(let[cat,items] of categorizedMenu){
+      // const catCom = (function(){
+      //   return ();
+      // })(); 
+      temp.push(<CatItem cat={cat} items={items} addProductToArray={this.addProductToArray} getProduct={this.getProduct} alterQuantity={this.alterQuantity} />);
+    }
+    return temp; 
+  }
 
   render() {
     const outlet = this.props.mainStore.selectedOutlet;
-    menuList = this.state.menu.map((l, i) => (
-      <FoodItem item={l} key={i} addProductToArray={this.addProductToArray} getProduct={this.getProduct} alterQuantity={this.alterQuantity}/>
-    ));
+    const categorizedMenu = this.categorize(this.state.menu,'cid');
+    console.log(categorizedMenu);
+    menuList = this.renderMenu();
+    //  menuList = this.state.menu.map((l, i) => (
+    //    <FoodItem
+    //      item={l}
+    //      key={i}
+    //      addProductToArray={this.addProductToArray}
+    //      getProduct={this.getProduct}
+    //      alterQuantity={this.alterQuantity}
+    //    />
+    // ));
     return (
       <View style={styles.container}>
         <HeaderComponent title="Home" navigation={this.props.navigation} />
@@ -277,14 +345,25 @@ class OutletMenuScreen extends Component {
               </Text>
             </View>
             <Divider style={{ backgroundColor: "transparent", height: 10 }} />
-            <View style={{ padding: 20 }}>
+            <View style={{ paddingHorizontal: 20 }}>
               <Text style={styles.menuTitle}>Menu</Text>
             </View>
             <View>
-            <View style={{justifyContent:'center',textAlign:'center',alignContent:'center',alignItems:'center'}}>
-            <ActivityIndicator animating={this.state.showIndicator} size="large" color={colors.primary} />
-            </View>
-            {menuList}
+              <View
+                style={{
+                  justifyContent: "center",
+                  textAlign: "center",
+                  alignContent: "center",
+                  alignItems: "center"
+                }}
+              >
+                <ActivityIndicator
+                  animating={this.state.showIndicator}
+                  size="large"
+                  color={colors.primary}
+                />
+              </View>
+              {menuList}
             </View>
           </ScrollView>
         </KeyboardAwareScrollView>
@@ -341,6 +420,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     marginBottom: 10,
     backgroundColor: colors.white
+  },
+  paddingScore : {
+    padding: 10,
+    marginBottom: 20
   },
   itemName: {
     fontSize: 18
@@ -438,7 +521,7 @@ const styles = StyleSheet.create({
   inputBox: {
     height: 50,
     borderBottomWidth: 1,
-    borderBottomColor: colors.greyBorder,
+    borderBottomColor: colors.greyBorder
     //padding: 10
   },
   input: {
@@ -451,7 +534,7 @@ const styles = StyleSheet.create({
   },
   inputRowWrapper: {
     flexDirection: "row",
-    margin: 10,
+    margin: 10
   },
   inputRowWrapperCustom: {
     flexDirection: "row",
@@ -460,20 +543,25 @@ const styles = StyleSheet.create({
   btnWrapper: {
     flex: 1
   },
-  quantityWrapper : {
+  quantityWrapper: {
     flex: 1,
     justifyContent: "center",
-    borderWidth : 1,
-    borderColor : colors.primary,
-    padding : 1
+    borderWidth: 1,
+    borderColor: colors.primary,
+    padding: 1
   },
-  quantityContainer : {
-    flex : 1,
-    marginHorizontal : 7.5,
+  quantityContainer: {
+    flex: 1,
+    marginHorizontal: 7.5
   },
-  quantitylabel : {
+  quantitylabel: {
     textAlign: "center",
+    color: colors.primary
+  },
+  catTitle: {
+    fontFamily: "Rubik-Bold",
+    fontSize: 15,
     color: colors.primary,
-
-  }
+    margin: 5
+  },
 });

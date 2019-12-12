@@ -143,13 +143,13 @@ const styles = StyleSheet.create({
     height: 30,
     borderBottomWidth: 0,
     fontWeight: 'bold',
-    fontSize: 10
+    fontSize: 13
   },
   input: {
     height: 30,
     borderBottomWidth: 0,
     fontWeight: 'bold',
-    fontSize: 10
+    fontSize: 13
   },
   inputWrapper: {
     margin: 10

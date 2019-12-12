@@ -99,7 +99,9 @@ const styles = StyleSheet.create({
         backgroundColor: colors.white
       },
       itemName: {
-        fontSize: 18
+        fontSize: 18,
+        flex : 1,
+        flexWrap: 'wrap'
       },
       itemCost: {
         fontSize: 15,
@@ -108,7 +110,7 @@ const styles = StyleSheet.create({
       panel: {
         marginBottom: 10,
         backgroundColor: colors.white,
-        padding: 20
+        padding: 10
       },
       outletTitle: {
         fontFamily: "Rubik-Bold",

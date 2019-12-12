@@ -180,6 +180,13 @@ class HomeScreen extends Component {
     return hours;
   };
 
+  validateQuantity = (q) => {
+    if(q>0){
+      return true;
+    }
+    else return false;
+  }
+
   handleSubmit = () => {
     const products = this.state.products.filter(product => product.name !== "");
     this.addToCart(products);
