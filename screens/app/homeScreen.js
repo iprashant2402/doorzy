@@ -108,7 +108,7 @@ class HomeScreen extends Component {
   };
 
   addProduct = async () => {
-    if(this.state.products.length<=10)
+    if(this.state.products.length<=9)
     {
       const newProduct = {
         name: "",
@@ -121,6 +121,9 @@ class HomeScreen extends Component {
       this.setState(prevState => ({
         products: [...prevState.products, newProduct]
       }));
+    }
+    else{
+      alert("You cannot order more than 10 items in one order.");
     }
   };
 
