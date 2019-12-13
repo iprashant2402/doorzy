@@ -108,18 +108,20 @@ class HomeScreen extends Component {
   };
 
   addProduct = async () => {
-    const newProduct = {
-      name: "",
-      brand: "",
-      quantity: 1,
-      preferredShop: "",
-      id: productId(),
-      estAmt: 0
-    };
-    this.setState(prevState => ({
-      products: [...prevState.products, newProduct]
-    }));
-    console.log(this.state.time);
+    if(this.state.products.length<=10)
+    {
+      const newProduct = {
+        name: "",
+        brand: "",
+        quantity: 1,
+        preferredShop: "",
+        id: productId(),
+        estAmt: 0
+      };
+      this.setState(prevState => ({
+        products: [...prevState.products, newProduct]
+      }));
+    }
   };
 
   removeProduct = id => {
