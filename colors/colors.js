@@ -10,5 +10,6 @@ export const colors = {
     'greyBorder' : '#e1e1e1',
     'primary' : '#6c4c8c',//'#428bca',
     'danger' : '#E71D36',
-    'darkGun' : '#0D1F2D'
+    'darkGun' : '#0D1F2D',
+    'secondaryGreen' : '#428bca'
 };
