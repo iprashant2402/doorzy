@@ -25,6 +25,7 @@ import { colors } from "../../colors/colors";
 import { HeaderComponent } from "../../components/header";
 import ProductForm from "../../components/productForm";
 import ProductFormUpdate from "../../components/productFormUpdate";
+import ProductFormNight from "../../components/productFormNight";
 import { Button, Divider, ListItem, Avatar, Card } from "react-native-elements";
 import { Notifications } from "expo";
 import * as Permissions from "expo-permissions";
@@ -264,13 +265,26 @@ class HomeScreen extends Component {
       );*/
       nightDeliveryDisclaimer = null;
     } else {
-      addProductForm = this.state.products.map((l, i) => (
-        <ProductFormUpdate
-          id={l.id}
-          removeProduct={this.removeProduct}
-          getProduct={this.getProduct}
-        />
-      ));
+      if(this.state.time >= 23 || this.state.time < 4)
+      {
+        addProductForm = this.state.products.map((l, i) => (
+          <ProductFormNight
+            id={l.id}
+            removeProduct={this.removeProduct}
+            getProduct={this.getProduct}
+          />
+        ));
+      }
+      else 
+      {
+        addProductForm = this.state.products.map((l, i) => (
+          <ProductFormUpdate
+            id={l.id}
+            removeProduct={this.removeProduct}
+            getProduct={this.getProduct}
+          />
+        ));
+      }
       nightDeliveryDisclaimer = null;
     }
     console.log(this.state.outlets);
