@@ -47,10 +47,9 @@ export default class AuthLoading extends Component {
     const thisPureRef = this;
     db.collection("notifications")
       .doc(uid)
-      .collection("notifs")
+      .collection("notifs").orderBy ("timestamp","desc").limit(10)
       .onSnapshot(function(snap) {
         if (snap) {
-          console.log("WOOAHH");
           const notifArray = [];
           snap.forEach(function(doc) {
             notifArray.push(doc.data());
