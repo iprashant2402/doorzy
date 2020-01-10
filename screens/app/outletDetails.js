@@ -23,7 +23,7 @@ import {
   createSwitchNavigator
 } from "react-navigation";
 import { colors } from "../../colors/colors";
-import { categories } from "../../util/categoriesDB";
+import { categoriesDB } from "../../util/categoriesDB";
 import { HeaderComponent } from "../../components/header";
 import ProductForm from "../../components/productForm";
 import {
@@ -55,7 +55,7 @@ function CatItem({cat, items, addProductToArray, getProduct, alterQuantity}){
   ));
   return(
     <View style={styles.itemRow&&styles.paddingScore}>
-      <Text style={styles.catTitle}>{categories[cat].toUpperCase()}</Text>
+      <Text style={styles.catTitle}>{categoriesDB[cat]}</Text>
       {menuList}
     </View>
   );

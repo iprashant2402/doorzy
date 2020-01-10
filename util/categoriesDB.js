@@ -1,14 +1,14 @@
-export const categories = {
-    'ROL' : 'rolls',
-    'RIC' : 'rice',
-    'BUR' : 'burgers',
-    'PAR' : 'paranthas',
-    'NOD' : 'noodles',
-    'MAG' : 'maggie',
-    'SAN' : 'sandwiches',
-    'FRI' : 'fries',
-    'PAK' : 'pakodas',
-    'COF' : 'coffee',
-    'TEA' : 'tea',
-    'BEV' : 'beverages'
+export const categoriesDB = {
+    'ROL' : 'ROLLS',
+    'RIC' : 'RICE',
+    'BUR' : 'BURGERS',
+    'PAR' : 'PARATHAS',
+    'NOD' : 'NOODLES',
+    'MAG' : 'MAGGIE',
+    'SAN' : 'SABDWICHES',
+    'FRI' : 'FRIES',
+    'PAK' : 'PAKODAS',
+    'COF' : 'COFFEE',
+    'TEA' : 'TEA',
+    'BEV' : 'BEVERAGES'
 };

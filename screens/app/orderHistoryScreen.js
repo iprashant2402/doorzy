@@ -85,6 +85,17 @@ class OrderHistoryScreen extends Component {
     return(null);
   }
 
+  getEstTime = (order) =>
+  {
+    if(order.expectedTime){
+    return (<View style={styles.timeWrapper}>
+      <Text style={{fontWeight:'bold', color:colors.secondaryGreen}}>Estimated Time for Delivery : {order.expectedTime} minutes</Text>
+    </View>);
+    }
+    else 
+    return(null);
+  }
+
   getPaymentStatus = (order) => {
     if(order.paymentRecieved){
       return(<View style={styles.btnWrapper}>
@@ -151,13 +162,14 @@ class OrderHistoryScreen extends Component {
          </View>
          {this.getTotal(l)}
          <View style={styles.timeWrapper}>
-            <Text style={styles.status}>{this.getPhoneNumber(l)}STATUS : {l.statusCode}</Text>
+            <Text style={styles.status}>STATUS : {l.statusCode}</Text>
          </View>
          {this.showPaymentLink(l)} 
          {this.getPaymentStatus(l)}
          <View style={styles.timeWrapper}>
            <Text style={styles.time}>Placed at : {this.getNotifDate(l.regTime)}</Text>
          </View>
+         {this.getEstTime(l)}
         </TouchableOpacity>
     ));
     return (
