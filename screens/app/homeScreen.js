@@ -108,7 +108,7 @@ class HomeScreen extends Component {
   };
 
   addProduct = async () => {
-    if(this.state.products.length<=9)
+    if(this.state.products.length<=6)
     {
       const newProduct = {
         name: "",
@@ -123,7 +123,7 @@ class HomeScreen extends Component {
       }));
     }
     else{
-      alert("You cannot order more than 10 items in one order.");
+      alert("You cannot order more than 7 items in one order.");
     }
   };
 

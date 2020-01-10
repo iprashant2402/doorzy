@@ -32,7 +32,7 @@
     "android": {
       "package": "com.doorzy.doorzyapp",
       "googleServicesFile": "./google-services.json",
-      "versionCode" : 3,
+      "versionCode" : 4,
       "permissions" : []
     },
     "description": ""
