@@ -228,7 +228,7 @@ class HomeScreen extends Component {
   }
 
   render() {
-    if (this.state.time >= 5 && this.state.time < 9) {
+    if (this.state.time >= 23 || this.state.time < 9) {
       addProductForm = (
         <View
           style={{
@@ -342,7 +342,7 @@ class HomeScreen extends Component {
               titleStyle={styles.btnTitle}
               type="clear"
               disabled={
-                this.state.time >= 5 && this.state.time < 9 ? true : false
+                this.state.time >= 23 || this.state.time < 9 ? true : false
               }
             />
           </View>

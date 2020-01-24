@@ -52,7 +52,8 @@ export default class FoodItem extends Component {
             veg : this.props.item.veg,
             quantity : this.props.item.quantity,
             cost : this.props.item.cost,
-            id : this.props.item.id
+            id : this.props.item.id,
+            active : this.props.item.active
         }
     }
 
@@ -68,9 +69,9 @@ export default class FoodItem extends Component {
             />
             <Text style={styles.itemName}>{this.state.name}</Text>
           </View>
-          <View style={styles.rightWrapper}>
+          {(this.state.active)? <View style={styles.rightWrapper}>
             {(this.state.quantity===0)?<AddButton addProduct={this.props.addProductToArray} product={this.state} quantity={this.state.quantity}/>:<QuantityButton quantity={this.state.quantity} product={this.state} alterQuantity={this.props.alterQuantity}/>}
-          </View>
+          </View> : <View><Text style={styles.redText}>Unavailable</Text></View>}
         </View>
         <Text style={styles.itemCost}>Rs.{this.state.cost}</Text>
       </View>
@@ -88,6 +89,9 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: "bold",
         color: colors.primary
+      },
+      redText: {
+        color: colors.danger
       },
       greenOutline: {
         borderColor: colors.successButton,
