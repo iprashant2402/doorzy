@@ -9,7 +9,7 @@ import {
   ScrollView,
   TextInput,
   StyleSheet,
-  Keyboard, Platform
+  Keyboard, Platform, SegmentedControlIOS
 } from "react-native";
 import { Linking, WebBrowser } from "expo";
 import firebase from "firebase/app";
@@ -20,6 +20,8 @@ import FullWidthImage from 'react-native-fullwidth-image';
 import { Input,Button } from 'react-native-elements';
 import { TouchableOpacity, TouchableWithoutFeedback } from "react-native-gesture-handler";
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import * as Segment from 'expo-analytics-segment';
+
 
 
 if (Platform.OS !== "web") {

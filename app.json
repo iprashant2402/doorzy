@@ -27,7 +27,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.doorzy.doorzyapp"
     },
     "android": {
       "package": "com.doorzy.doorzyapp",

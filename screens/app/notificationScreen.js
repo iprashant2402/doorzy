@@ -6,6 +6,7 @@ import {Button,ListItem,Divider,Icon} from 'react-native-elements';
 import firebase from 'firebase';
 import 'firebase/firestore';
 import NotificationItem from '../../components/notificationItem';
+import * as Segment from "expo-analytics-segment";
 
 if (Platform.OS !== 'web') {
   window = undefined
@@ -16,6 +17,10 @@ if (Platform.OS !== 'web') {
 export default class NotificationsScreen extends Component {
   constructor(props){
     super(props);
+  }
+
+  componentDidMount(){
+    Segment.screen("Notifications Screen");
   }
 
   getNotifDate=(timestamp)=>{

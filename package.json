@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "expo": "^33.0.0",
+    "expo-analytics-segment": "^5.0.1",
     "expo-font": "^5.0.1",
     "firebase": "^6.1.1",
     "firebase-nest": "^0.7.1",

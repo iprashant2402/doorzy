@@ -21,6 +21,8 @@ import { Button } from "react-native-elements";
 import generateInviteCode from '../../util/generateInviteCode';
 import registerForPushNotificationsAsync from '../../util/registerPushNotification';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import * as Segment from 'expo-analytics-segment';
+
 
 const notifId = require('uuid/v4');
 
@@ -93,7 +95,17 @@ class RegisterScreen extends Component {
         invitesLeft : 10,
         regTimestamp : + new Date()
       };
-
+      Segment.identifyWithTraits(uid,{
+        firstName: user.fname,
+        lastName: user.lname,
+        phone: user.phone,
+        createdAt: new Date(user.regTimestamp)
+      });
+      Segment.trackWithProperties('Sign Up',{
+        firstName: user.fname,
+        lastName: user.lname,
+        phone: user.phone
+      });
       await registerForPushNotificationsAsync(uid);
 
       await notifBucket.doc(nid).set({

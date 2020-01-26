@@ -4,6 +4,8 @@ import firebase from "firebase";
 import "firebase/firestore";
 import { inject } from "mobx-react/native";
 import {colors} from "../../colors/colors";
+import * as Segment from 'expo-analytics-segment';
+import { Notifications } from 'expo';
 
 
 if (Platform.OS !== "web") {
@@ -64,6 +66,8 @@ export default class AuthLoading extends Component {
   };
 
   
+
+  
   componentDidMount() {
     const db = firebase.firestore();
     const rootRef = this.props.navigation;
@@ -81,6 +85,17 @@ export default class AuthLoading extends Component {
             if (userData.exists) {
               userRef.onSnapshot(function(snap) {
                 storeRef.mainStore.setUser(snap.data());
+                Segment.identifyWithTraits(uid,{
+                  firstName: snap.data().fname,
+                  lastName: snap.data().lname,
+                  phone: snap.data().phone,
+                  createdAt: new Date(snap.data().regTimestamp)
+                });
+                Segment.trackWithProperties('Sign In',{
+                  firstName: snap.data().fname,
+                  lastName: snap.data().lname,
+                  phone: snap.data().phone
+                });
               });
               rootRef.navigate("App");
             } else {

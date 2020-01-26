@@ -26,6 +26,7 @@ import {
 } from "react-native-elements";
 import { ScrollView } from "react-native-gesture-handler";
 import AddressItem from '../../components/addressItem';
+import * as Segment from "expo-analytics-segment";
 
 
 

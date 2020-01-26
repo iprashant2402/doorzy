@@ -29,6 +29,7 @@ import ProductFormNight from "../../components/productFormNight";
 import { Button, Divider, ListItem, Avatar, Card } from "react-native-elements";
 import { Notifications } from "expo";
 import * as Permissions from "expo-permissions";
+import * as Segment from "expo-analytics-segment";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 const productId = require("uuid/v4");
 if (Platform.OS !== "web") {
@@ -109,8 +110,7 @@ class HomeScreen extends Component {
   };
 
   addProduct = async () => {
-    if(this.state.products.length<=6)
-    {
+    if (this.state.products.length <= 6) {
       const newProduct = {
         name: "",
         brand: "",
@@ -122,8 +122,7 @@ class HomeScreen extends Component {
       this.setState(prevState => ({
         products: [...prevState.products, newProduct]
       }));
-    }
-    else{
+    } else {
       alert("You cannot order more than 7 items in one order.");
     }
   };
@@ -153,17 +152,15 @@ class HomeScreen extends Component {
     });
   };
 
-  checkItemUpdate(item,product){
-    if(product.id === item.id){
-      if(product.name !== item.name || product.quantity !== item.quantity){
+  checkItemUpdate(item, product) {
+    if (product.id === item.id) {
+      if (product.name !== item.name || product.quantity !== item.quantity) {
         this.props.mainStore.removeItemFromCart(item.id);
         return true;
-      }
-      else{
+      } else {
         return false;
       }
-    }
-    else{
+    } else {
       return true;
     }
   }
@@ -171,7 +168,9 @@ class HomeScreen extends Component {
   addToCart = async products => {
     const thisRef = this;
     this.props.mainStore.cart.forEach(function(item) {
-      products = products.filter(product => thisRef.checkItemUpdate(item,product));
+      products = products.filter(product =>
+        thisRef.checkItemUpdate(item, product)
+      );
     });
     this.props.mainStore.setCart(products);
     await this.props.mainStore.setRoute("HomeScreen");
@@ -186,22 +185,33 @@ class HomeScreen extends Component {
     return hours;
   };
 
-  validateQuantity = (q) => {
-    if(q>0){
+  validateQuantity = q => {
+    if (q > 0) {
       return true;
-    }
-    else return false;
-  }
+    } else return false;
+  };
 
   handleSubmit = () => {
     const products = this.state.products.filter(product => product.name !== "");
     this.addToCart(products);
   };
 
+  _handleNotification = notification => {
+    if (notification.origin === "selected") {
+      Segment.trackWithProperties("Notification Opened", {
+        time: +new Date()
+      });
+    }
+  };
+
   componentDidMount() {
     this.setState({
       time: this.getCurrentTime()
     });
+    this._notificationSubscription = Notifications.addListener(
+      this._handleNotification
+    );
+    Segment.screen("Home Screen");
     console.log("LINE 164 : homeScreen.js");
     const outletRef = firebase.firestore().collection("outlets");
     const thisRef = this;
@@ -240,10 +250,16 @@ class HomeScreen extends Component {
         >
           {/* <Text style={styles.text1}>
             We are accepting orders only for doorzy Food Partners after 11:00 PM.
-          </Text> */}
-          <Text style={styles.text1}>
+          </Text> 
+            <Text style={styles.text1}>
             Sorry, we are closed for now. We will be back live at 9 am.
           </Text>
+          */}
+        </View>
+      );
+      productFormTitle = (
+        <View style={styles.originals}>
+          <Text style={styles.text1}>What do you want to buy?</Text>
         </View>
       );
       /*nightDeliveryDisclaimer = (
@@ -265,8 +281,7 @@ class HomeScreen extends Component {
       );*/
       nightDeliveryDisclaimer = null;
     } else {
-      if(this.state.time >= 23 || this.state.time < 4)
-      {
+      if (this.state.time >= 23 || this.state.time < 4) {
         addProductForm = this.state.products.map((l, i) => (
           <ProductFormNight
             id={l.id}
@@ -274,9 +289,12 @@ class HomeScreen extends Component {
             getProduct={this.getProduct}
           />
         ));
-      }
-      else 
-      {
+      } else {
+        productFormTitle = (
+          <View style={styles.originals}>
+            <Text style={styles.text1}>What do you want to buy?</Text>
+          </View>
+        );
         addProductForm = this.state.products.map((l, i) => (
           <ProductFormUpdate
             id={l.id}
@@ -323,11 +341,7 @@ class HomeScreen extends Component {
               keyExtractor={item => item.id}
             />
             <Divider style={{ backgroundColor: "transparent", height: 20 }} />
-            <View style={styles.originals}>
-              <Text style={styles.text1}>
-                What do you want to buy?
-              </Text>
-            </View>
+            {productFormTitle}
             <Divider style={{ backgroundColor: "transparent", height: 20 }} />
             {addProductForm}
             <View style={styles.btnWrapper}></View>
@@ -398,7 +412,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white
   },
   flexOne: {
-    flex: 1,
+    flex: 1
   },
 
   flexTwo: {
@@ -412,7 +426,7 @@ const styles = StyleSheet.create({
     textAlign: "center"
   },
   outletItemWrapper: {
-    backgroundColor: colors.white,
+    backgroundColor: colors.white
   },
   itemTitle: {
     fontFamily: "Rubik-Bold",
@@ -462,7 +476,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.successButton,
     borderRadius: 0,
     marginVertical: 0,
-    height: 50,
+    height: 50
   },
   btn: {
     backgroundColor: colors.brandPrimary,
@@ -486,11 +500,11 @@ const styles = StyleSheet.create({
   },
   btnTitle: {
     color: colors.white,
-    fontWeight: 'bold'
+    fontWeight: "bold"
   },
   orderbtnTitle: {
     color: colors.white,
-    fontWeight: 'bold'
+    fontWeight: "bold"
   },
   btnWrapper: {
     padding: 20,

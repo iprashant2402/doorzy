@@ -15,6 +15,7 @@ import "firebase/firestore";
 import addAddress from "../../util/addAddress";
 const addressId = require("uuid/v4");
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import * as Segment from "expo-analytics-segment";
 
 if (Platform.OS !== "web") {
   window = undefined;
@@ -40,6 +41,10 @@ export default class AddLocationScreen extends Component {
       routeName : this.props.mainStore.route,
       loading : false
     };
+  }
+
+  componentDidMount(){
+    Segment.screen("Add Address Screen");
   }
 
   validateAddressForm = () => {

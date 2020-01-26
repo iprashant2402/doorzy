@@ -18,6 +18,7 @@ import getOrdersList from '../../util/getOrdersList';
 import {Button} from 'react-native-elements';
 import { ScrollView } from "react-native-gesture-handler";
 import { extendObservable } from "mobx";
+import * as Segment from "expo-analytics-segment";
 if (Platform.OS !== "web") {
   window = undefined;
 }
@@ -104,6 +105,7 @@ class OrderHistoryScreen extends Component {
     }
   }
   componentDidMount = () => {
+    Segment.screen("Order History Screen");
     const thisRef = this;
         const ordersRef = firebase.firestore().collection('orders');
         ordersRef.where("uid","==",this.props.mainStore.uid).onSnapshot(function(snap){

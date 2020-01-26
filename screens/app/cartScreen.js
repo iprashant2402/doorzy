@@ -8,10 +8,12 @@ import {
   Platform,
   TextInput,
   ActivityIndicator,
-  Modal
+  Modal,
+  SegmentedControlIOS
 } from "react-native";
 import { colors } from "../../colors/colors";
 import { Button, ListItem, Divider, Icon,Card } from "react-native-elements";
+import * as Segment from "expo-analytics-segment";
 import firebase from "firebase";
 import "firebase/firestore";
 import addAddress from "../../util/addAddress";
@@ -45,6 +47,7 @@ export default class CartScreen extends Component {
         address : address
       });
     }
+    Segment.screen('Cart Screen');
   }
 
   setDeliveryAddress = address => {

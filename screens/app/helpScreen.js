@@ -3,7 +3,7 @@ This View is responsible for showing previous orders' history
 */ 
 
 import React, { Component } from 'react';
-import {View,Text,Platform,StyleSheet,Keyboard,SafeAreaView,ScrollView,KeyboardAvoidingView,TouchableWithoutFeedback} from 'react-native';
+import {View,Text,Platform,StyleSheet,Keyboard,SafeAreaView,ScrollView,KeyboardAvoidingView,TouchableWithoutFeedback, SegmentedControlIOS} from 'react-native';
 import { inject, observer } from 'mobx-react/native';
 import firebase from 'firebase';
 import { createStackNavigator, createAppContainer, createDrawerNavigator, createSwitchNavigator} from 'react-navigation';
@@ -12,6 +12,7 @@ import {HeaderComponent} from '../../components/header';
 import ChatBox from '../../components/chatBox';
 import { Header }from 'react-navigation';
 import { TextInput } from 'react-native-gesture-handler';
+import * as Segment from "expo-analytics-segment";
 
 if (Platform.OS !== 'web') {
     window = undefined
@@ -43,6 +44,7 @@ class HelpScreen extends Component {
 
   componentDidMount(){
     this.getAllIssues();
+    Segment.screen('Help Screen');
   }
   
   render() {

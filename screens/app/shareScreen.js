@@ -18,6 +18,7 @@ import addAddress from "../../util/addAddress";
 import ProductItem from "../../components/productItem";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import placeOrder from "../../util/placeOrder";
+import * as Segment from "expo-analytics-segment";
 const addressId = require("uuid/v4");
 
 if (Platform.OS !== "web") {

@@ -6,7 +6,10 @@ import firebase from 'firebase';
 import {Routes} from './routes/routes.js';
 import {mainStore} from './stores/mainStore';
 import {firebaseConfig} from './firebase/firebaseConfig';
+import * as Segment from 'expo-analytics-segment';
+
 firebase.initializeApp(firebaseConfig);
+Segment.initialize({androidWriteKey:'iQPBXiTdtmt3KKHxG4Q7IJR4XfCJNyNO',iosWriteKey:'auYtbmcHNigkpgHRTAXtculsIMyHoR3J'});
 
 export default class App extends Component {
 

@@ -38,6 +38,7 @@ import { Notifications } from "expo";
 import * as Permissions from "expo-permissions";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import FoodItem from "../../components/foodItem";
+import * as Segment from "expo-analytics-segment";
 const productId = require("uuid/v4");
 if (Platform.OS !== "web") {
   window = undefined;
@@ -192,9 +193,7 @@ class OutletMenuScreen extends Component {
   };
 
   componentDidMount() {
-    console.log(
-      "LINE 54 : outletDetails.js : " + this.props.mainStore.selectedOutlet.id
-    );
+    Segment.screen(this.props.mainStore.selectedOutlet.title+" Menu Screen");
     const thisRef = this;
     this.focusListener = this.props.navigation.addListener("didFocus", () => {
       this.setState({

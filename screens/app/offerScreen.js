@@ -13,6 +13,7 @@ import {HeaderComponent} from '../../components/header';
 import ChatBox from '../../components/chatBox';
 import { Header }from 'react-navigation';
 import { TextInput } from 'react-native-gesture-handler';
+import * as Segment from "expo-analytics-segment";
 
 if (Platform.OS !== 'web') {
     window = undefined
@@ -44,6 +45,7 @@ class OfferScreen extends Component {
 
   componentDidMount(){
     this.getAllIssues();
+    Segment.screen("Offer Screen");
   }
   
   render() {
