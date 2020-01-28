@@ -257,11 +257,7 @@ class HomeScreen extends Component {
           */}
         </View>
       );
-      productFormTitle = (
-        <View style={styles.originals}>
-          <Text style={styles.text1}>What do you want to buy?</Text>
-        </View>
-      );
+      productFormTitle = null;
       /*nightDeliveryDisclaimer = (
         <View
           style={{

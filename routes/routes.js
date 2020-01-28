@@ -58,6 +58,12 @@ const RegisterScreenMainNavigator = createStackNavigator({
 
 const AuthLoadingNavigator = createStackNavigator({
   AuthLoading : AuthLoading
+},
+{
+  headerMode : 'none',
+  navigationOptions : {
+      headerVisible : false
+  } 
 });
 
 const AuthNavigator = createStackNavigator({

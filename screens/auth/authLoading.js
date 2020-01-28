@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, ActivityIndicator, Platform ,StyleSheet,ImageBackground} from "react-native";
+import { View, Text, ActivityIndicator, Platform ,StyleSheet,ImageBackground,} from "react-native";
 import firebase from "firebase";
 import "firebase/firestore";
 import { inject } from "mobx-react/native";
@@ -97,7 +97,8 @@ export default class AuthLoading extends Component {
                   phone: snap.data().phone
                 });
               });
-              rootRef.navigate("App");
+              setTimeout(function(){rootRef.navigate("App")},300);
+              
             } else {
               rootRef.navigate("Register");
             }
@@ -114,13 +115,13 @@ export default class AuthLoading extends Component {
 
   render() {
     return (
-      <ImageBackground source={require('../../assets/images/doodles/doodles.png')} style={styles.container}>
-        <Text style={styles.text}>
+      <ImageBackground source={require('../../assets/images/doodles/splash_anim.gif')} style={styles.container}>
+        {/* <Text style={styles.text}>
           Signing you in...
           </Text>
           <View style={styles.indicator}>
               <ActivityIndicator color={colors.primary} />
-          </View>
+          </View> */}
       </ImageBackground>
     );
   }
