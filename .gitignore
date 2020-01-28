@@ -10,3 +10,5 @@ firebase/*
 *.orig.*
 web-build/
 web-report/
+firebase/firebaseConfig.js
+package-lock.json
