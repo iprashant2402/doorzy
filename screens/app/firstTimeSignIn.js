@@ -55,10 +55,10 @@ class RegisterScreen extends Component {
       loading: false,
       sendOtp: false,
       verificationCode: "",
-      phoneSubmitted: false
+      phoneSubmitted: false,
+      success: true
     };
   }
-
   validate = (fname, lname, phone) => {
     if (fname == "" || lname == "" || phone == "") {
       this.setState({
@@ -90,30 +90,11 @@ class RegisterScreen extends Component {
       return true;
     }
   };
-  // validatePhoneNumber = async () => {
-  //   var regexp = /^\+[0-9]?()[0-9](\s|\S)(\d[0-9]{8,16})$/
-  //   return regexp.test(this.state.phone)
-  // };
-  // handleVerifyCode = async () => {
-  //   const { confirmResult, verificationCode } = this.state;
-  //   if (verificationCode.length == 6) {
-  //     confirmResult
-  //       .confirm(verificationCode)
-  //       .then(this.onSubmit())
-  //       .catch(error => {
-  //         alert(error.message);
-  //         console.log(error);
-  //       });
-  //   } else {
-  //     alert("Please enter a 6 digit OTP code.");
-  //   }
-  //   console.log("yohoooo");
-  // };
   detailSubmit = async () => {
     if (this.validate(this.state.fname, this.state.lname, this.state.phone)) {
       const { phone } = this.state;
       var newPhone = "+91" + phone;
-      this.setState({ phone: newPhone });
+      this.setState({ phone: newPhone, success: true });
       this.setState({ phoneSubmitted: true });
     } else {
       console.log(this.state.error);
@@ -128,7 +109,8 @@ class RegisterScreen extends Component {
         this.webviewRef.injectJavaScript(`getToken('${phone}')`);
         return;
       case "ErrorSmsCode":
-        // SMS Not sent or Captcha verification failed. You can do whatever you want here
+        // SMS Not sent or Captcha verification failed. You can do whatever you want here.
+        this.setState({success: false, phoneSubmitted: false})
         return;
       case "":
         return;
@@ -141,44 +123,6 @@ class RegisterScreen extends Component {
     }
     console.log("saksham");
   };
-  // verifyOtp = async event => {
-  //   if (this.validate(this.state.fname, this.state.lname, this.state.phone)) {
-  //     const { phone } = this.state;
-  //     const message = event.nativeEvent.data;
-
-  //     switch (message) {
-  //       case "DOMLoaded":
-  //         this.webviewRef.injectJavaScript(`getToken('${phone}')`);
-  //         return;
-  //       case "ErrorSmsCode":
-  //         // SMS Not sent or Captcha verification failed. You can do whatever you want here
-  //         return;
-  //       case "":
-  //         return;
-  //       default: {
-  //         this.setState({
-  //           promptSmsCode: true,
-  //           verificationId: message
-  //         });
-  //       }
-  //     }
-
-  //     // firebase
-  //     //   .auth()
-  //     //   .signInWithPhoneNumber(this.state.phone)
-  //     //   .then(confirmResult => {
-  //     //     this.setState({ confirmResult });
-  //     //   })
-  //     //   .catch(error => {
-  //     //     alert(error.message);
-  //     //     console.log(error);
-  //     //   });
-  //     this.setState({ sendOtp: true });
-  //   } else {
-  //     console.log(this.state.error);
-  //     this.setState({ loading: false });
-  //   }
-  // };
   onSignIn = async () => {};
   onSubmit = async () => {
     this.setState({ loading: true });
@@ -315,6 +259,7 @@ class RegisterScreen extends Component {
                   disabled={this.state.loading}
                 />
               </View>
+              {success ? (<Text>Either captcha was wrong or you entered incorrect number</Text>) : (<Text></Text>)}
             </View>
             <View style={styles.errorContainer}>
               <Text style={styles.error}>{this.state.error}</Text>
