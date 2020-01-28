@@ -1,6 +1,8 @@
 node_modules/**/*
 .expo/*
 npm-debug.*
+package-lock.json
+firebase/*
 *.jks
 *.p12
 *.key
