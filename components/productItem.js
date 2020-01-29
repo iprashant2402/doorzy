@@ -26,7 +26,7 @@ export default function ProductItem(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop : 20,
+    paddingTop : 10,
     flexDirection : 'row'
   },
   rightWrapper : {

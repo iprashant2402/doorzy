@@ -36,7 +36,8 @@ export default class CartScreen extends Component {
       couponCode: "NILL",
       address: undefined,
       showIndicator: false,
-      showModal: false
+      showModal: false,
+      instruction: ''
     };
   }
 
@@ -69,6 +70,12 @@ export default class CartScreen extends Component {
     this.props.mainStore.removeItemFromCart(id);
   }
 
+  handleInstructionText = (text) => {
+    this.setState({
+      instruction : text
+    });
+  }
+
   submitOrder = () => {
     if (!(this.state.address === "" || this.state.address === undefined) && !(this.props.mainStore.cart.length<1)) {
       this.setState({ showIndicator: true }, () => {
@@ -78,7 +85,8 @@ export default class CartScreen extends Component {
             this.state.couponCode,
             this.props.mainStore.uid,
             this.props.mainStore.user.phone,
-            this.props.mainStore.cart
+            this.props.mainStore.cart,
+            this.state.instruction
           )
         ) {
           this.setState({ showIndicator: false }, () => {
@@ -100,7 +108,7 @@ export default class CartScreen extends Component {
 
   render() {
     if(this.props.mainStore.cart.length<1){
-      productItem = <Card style={styles.productItem}><Text style={styles.text1}>Your cart is empty :(</Text></Card>
+      productItem = <View><Card style={styles.productItem && styles.titleContainer}><Text style={styles.text1}>Your cart is empty :(</Text></Card><Divider style={{ height: 20, backgroundColor: colors.white }} /></View>
       estTotal = null;
       }
     else{
@@ -165,6 +173,9 @@ export default class CartScreen extends Component {
           </View>
         </View>
         <Divider style={{ height: 10, backgroundColor: colors.white }} />
+        <View style={styles.ph20}>
+            <Text style={styles.textHeading}>Items in your cart</Text>
+          </View>
         <ScrollView style={{ marginTop: 15 }}>
           <Modal
             animationType="slide"
@@ -191,11 +202,19 @@ export default class CartScreen extends Component {
               </View>
             </View>
           </Modal>
+          
           {productItem}
           {estTotal}
+
+          <View style={styles.ph20}>
+              <TextInput placeholder="Any specific instructions? Add ciggaretes here." style={styles.instructionBox} onChangeText={(text)=>{this.handleInstructionText(text)}} value={this.state.instruction}/>
+          </View>
+          
           <View style={styles.ph20}>
             <Text style={styles.textHeading}>Tap the Address to proceed:</Text>
           </View>
+          <Divider style={{ height: 10, backgroundColor: colors.white }} />
+
           {addressComponent}
           <View style={styles.generalTextWrapper}>
           <Button title='ADD NEW ADDRESS' onPress={()=>{this.props.mainStore.setRoute("CartScreen");console.log(this.props.mainStore.route);this.props.navigation.navigate('AddLocationScreen')}} buttonStyle={{marginTop : 20,borderColor:colors.successButton,borderWidth:2}} type='outline' icon={{name:'add-location',color:colors.successButton}} titleStyle={{color:colors.successButton,fontWeight: 'bold'}}/>
@@ -217,6 +236,14 @@ export default class CartScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: colors.white
+  },
+  instructionBox: {
+    borderColor: colors.greyBorder,
+    borderWidth: 1,
+    borderRadius: 5,
+    padding : 10,
+    height: 70,
     backgroundColor: colors.white
   },
   total : {

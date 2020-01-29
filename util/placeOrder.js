@@ -9,7 +9,7 @@ if (Platform.OS !== "web") {
   window = undefined;
 }
 
-export default async function placeOrder(address,couponCode,uid,phone,cart){
+export default async function placeOrder(address,couponCode,uid,phone,cart,instruction){
 
     const order = {};
     order.uid = uid;
@@ -23,11 +23,12 @@ export default async function placeOrder(address,couponCode,uid,phone,cart){
     order.address = address;
     order.oid = "1001"+Math.floor(100000 + Math.random() * 900000);
     order.paymentLinkActive = false;
+    order.instruction = instruction;
     const title = "Order Placed"
     const content = "Your order with Order Id #"+order.oid+" has been placed successfully and pending confirmation from our delivery executive."
     const db = firebase.firestore();
-    await fetch('https://powerful-wave-93367.herokuapp.com/newOrderNotification');
-    await db.collection('orders').doc(order.oid).set(order).then(function(){
+    fetch('https://powerful-wave-93367.herokuapp.com/newOrderNotification');
+    db.collection('orders').doc(order.oid).set(order).then(function(){
       sendNotification(order.uid,content,title);
       return true;
     }).catch(function(err){console.log(err);return false;});

@@ -293,6 +293,7 @@ class HomeScreen extends Component {
         );
         addProductForm = this.state.products.map((l, i) => (
           <ProductFormUpdate
+            key={i}
             id={l.id}
             removeProduct={this.removeProduct}
             getProduct={this.getProduct}

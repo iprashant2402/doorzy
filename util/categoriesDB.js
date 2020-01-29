@@ -10,5 +10,16 @@ export const categoriesDB = {
     'PAK' : 'PAKODAS',
     'COF' : 'COFFEE',
     'TEA' : 'TEA',
-    'BEV' : 'BEVERAGES'
+    'BEV' : 'BEVERAGES',
+    'BRE' : 'BREAKFAST',
+    'OME' : 'OMELETTE',
+    'MEA' : 'MEALS',
+    'PAS' : 'PASTAS',
+    'LAS' : 'LASSI',
+    'SOD' : 'SODA',
+    'SHA' : 'SHAKES',
+    'MIL' : 'MILK',
+    'JUC' : 'JUICES',
+    'MOM' : 'MOMOS',
+    'CHA' : 'CHATS'
 };
