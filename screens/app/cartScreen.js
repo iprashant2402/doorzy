@@ -85,6 +85,9 @@ export default class CartScreen extends Component {
             this.setState({ showModal: true });
             this.props.mainStore.resetCart();
           });
+          Segment.trackWithProperties("Order Placed", {
+            time: +new Date()
+          });
         } else {
           console.log("FAILED TO PLACE ORDER");
         }
