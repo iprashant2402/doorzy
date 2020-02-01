@@ -4,7 +4,7 @@ e.g. what product? which brand? quantity? ....
 */
 
 import React, { Component } from "react";
-import { View, ScrollView, Text, Platform, StyleSheet } from "react-native";
+import { View, ScrollView, Text, Platform, StyleSheet, Picker } from "react-native";
 import { inject, observer } from "mobx-react/native";
 import firebase from "firebase";
 import "firebase/firestore";
@@ -18,13 +18,12 @@ import {
 import { colors } from "../../colors/colors";
 import { TextInput } from "react-native-gesture-handler";
 import { Button } from "react-native-elements";
-import generateInviteCode from '../../util/generateInviteCode';
-import registerForPushNotificationsAsync from '../../util/registerPushNotification';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import * as Segment from 'expo-analytics-segment';
+import generateInviteCode from "../../util/generateInviteCode";
+import registerForPushNotificationsAsync from "../../util/registerPushNotification";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import * as Segment from "expo-analytics-segment";
 
-
-const notifId = require('uuid/v4');
+const notifId = require("uuid/v4");
 
 if (Platform.OS !== "web") {
   window = undefined;
@@ -40,7 +39,8 @@ class RegisterScreen extends Component {
       lname: "",
       phone: "",
       error: "",
-      loading : false
+      loading: false,
+      city: "vellore"
     };
   }
 
@@ -70,126 +70,169 @@ class RegisterScreen extends Component {
         error: "Enter a valid 10-digit phone number."
       });
       return false;
-    }else {
-      this.setState({error:''});
+    } else {
+      this.setState({ error: "" });
       return true;
     }
   };
 
-   onSubmit = async () => {
+  onSubmit = async () => {
     if (this.validate(this.state.fname, this.state.lname, this.state.phone)) {
-      this.setState({loading:true});
+      this.setState({ loading: true });
       const db = firebase.firestore();
       var uid = this.props.mainStore.uid;
       var nid = notifId();
-      var notifBucket = db.collection('notifications').doc(uid).collection('notifs');
+      var notifBucket = db
+        .collection("notifications")
+        .doc(uid)
+        .collection("notifs");
       var rootRef = this.props.navigation;
       var storeRef = this.props;
       var thisRef = this;
       const inviteCode = generateInviteCode(6);
       const user = {
-        fname : this.state.fname,
-        lname : this.state.lname,
-        phone : this.state.phone,
-        inviteCode : inviteCode,
-        invitesLeft : 10,
-        regTimestamp : + new Date()
+        fname: this.state.fname,
+        lname: this.state.lname,
+        phone: this.state.phone,
+        city: this.state.city,
+        inviteCode: inviteCode,
+        invitesLeft: 10,
+        regTimestamp: +new Date()
       };
-      Segment.identifyWithTraits(uid,{
+      Segment.identifyWithTraits(uid, {
         firstName: user.fname,
         lastName: user.lname,
         phone: user.phone,
         createdAt: new Date(user.regTimestamp)
       });
-      Segment.trackWithProperties('Sign Up',{
+      Segment.trackWithProperties("Sign Up", {
         firstName: user.fname,
         lastName: user.lname,
         phone: user.phone
       });
       await registerForPushNotificationsAsync(uid);
 
-      await notifBucket.doc(nid).set({
-        id : nid,
-        timestamp : + new Date(),
-        read : false,
-        content : "Hi "+this.state.fname+", Welcome to the doorzy family. You are one of our first customers and you are special for us. I personally thank you for choosing doorzy as your doorstep delivery companion. Also, we are open to feedbacks and appreciate any kind of feedback or criticism.",
-        title : "Welcome aboard!"
-      }).catch(function(err){
-        this.setState({loading:false});
-        console.log(err);
-      });
+      await notifBucket
+        .doc(nid)
+        .set({
+          id: nid,
+          timestamp: +new Date(),
+          read: false,
+          content:
+            "Hi " +
+            this.state.fname +
+            ", Welcome to the doorzy family. You are one of our first customers and you are special for us. I personally thank you for choosing doorzy as your doorstep delivery companion. Also, we are open to feedbacks and appreciate any kind of feedback or criticism.",
+          title: "Welcome aboard!"
+        })
+        .catch(function(err) {
+          this.setState({ loading: false });
+          console.log(err);
+        });
 
-      await db.collection("inviteCodes").doc(uid).set({code : inviteCode,uid : uid}).then(()=>{
-        
-      }).catch(err=>{console.log(err);this.setState({loading:false});});
+      await db
+        .collection("inviteCodes")
+        .doc(uid)
+        .set({ code: inviteCode, uid: uid })
+        .then(() => {})
+        .catch(err => {
+          console.log(err);
+          this.setState({ loading: false });
+        });
 
-      await db.collection('users').doc(uid).set(user,{merge:true}).then(function(){
-        storeRef.mainStore.setUser(user);
-        rootRef.navigate('App');
-      }).catch(err =>{console.log(err);this.setState({loading:false});});
-
+      await db
+        .collection("users")
+        .doc(uid)
+        .set(user, { merge: true })
+        .then(function() {
+          storeRef.mainStore.setUser(user);
+          rootRef.navigate("App");
+        })
+        .catch(err => {
+          console.log(err);
+          this.setState({ loading: false });
+        });
     } else {
       console.log(this.state.error);
-      this.setState({loading:false});
+      this.setState({ loading: false });
     }
   };
 
   render() {
     return (
       <KeyboardAwareScrollView enableOnAndroid={true}>
-      <ScrollView contentContainerStyle={styles.body}>
-        <View style={styles.formTitleWrapper}>
-          <Text style={styles.h3}>
-            Welcome to doorzy <Text style={styles.secondaryColor}>FAMILY.</Text>
-          </Text>
-        </View>
-        <View style={styles.formContainer}>
-          <View style={styles.textInputWrapper}>
-            <TextInput
-              style={styles.textInput}
-              placeholder="First name"
-              value={this.state.fname}
-              onChangeText={text => {
-                this.setState({ fname: text });
-              }}
-            />
+        <ScrollView contentContainerStyle={styles.body}>
+          <View style={styles.formTitleWrapper}>
+            <Text style={styles.h3}>
+              Welcome to doorzy{" "}
+              <Text style={styles.secondaryColor}>FAMILY.</Text>
+            </Text>
           </View>
-          <View style={styles.textInputWrapper}>
-            <TextInput
-              style={styles.textInput}
-              placeholder="Last name"
-              value={this.state.lname}
-              onChangeText={text => {
-                this.setState({ lname: text });
-              }}
-            />
+          <View style={styles.formContainer}>
+            <View style={styles.textInputWrapper}>
+              <TextInput
+                style={styles.textInput}
+                placeholder="First name"
+                value={this.state.fname}
+                onChangeText={text => {
+                  this.setState({ fname: text });
+                }}
+              />
+            </View>
+            <View style={styles.textInputWrapper}>
+              <TextInput
+                style={styles.textInput}
+                placeholder="Last name"
+                value={this.state.lname}
+                onChangeText={text => {
+                  this.setState({ lname: text });
+                }}
+              />
+            </View>
+            <View style={styles.textInputWrapper}>
+              <TextInput
+                style={styles.textInput}
+                placeholder="Mobile Number"
+                value={this.state.phone}
+                onChangeText={text => {
+                  this.setState({ phone: text });
+                }}
+              />
+            </View>
+            <View style={styles.textInputWrapper}>
+              <Text style={styles.text1}>Select your city:</Text>
+            </View>
+            <View style={styles.textInputWrapper}>
+              <Picker
+                selectedValue={this.state.city}
+                style={{ height: 50 }}
+                onValueChange={(itemValue, itemIndex) =>
+                  this.setState({ city: itemValue })
+                }
+              >
+                <Picker.Item label="Vellore" value="vellore" />
+              </Picker>
+            </View>
+            <View style={styles.textInputWrapper}>
+              <Button
+                buttonStyle={styles.btn}
+                type="solid"
+                raised={false}
+                onPress={this.onSubmit}
+                title="Next"
+                loading={this.state.loading}
+                disabled={this.state.loading}
+              />
+            </View>
+            <View style={styles.errorContainer}>
+              <Text style={styles.error}>{this.state.error}</Text>
+            </View>
+            <View style={styles.textInputWrapper}>
+            <View style={styles.warningWrapper}>
+              <Text style={styles.text1}>Currently we are operating in Vellore, Tamil Nadu only.</Text>
+            </View>
+            </View>
           </View>
-          <View style={styles.textInputWrapper}>
-            <TextInput
-              style={styles.textInput}
-              placeholder="Mobile Number"
-              value={this.state.phone}
-              onChangeText={text => {
-                this.setState({ phone: text });
-              }}
-            />
-          </View>
-          <View style={styles.textInputWrapper}>
-            <Button
-              buttonStyle={styles.btn}
-              type="solid"
-              raised={false}
-              onPress={this.onSubmit}
-              title="Next"
-              loading={this.state.loading}
-              disabled={this.state.loading}
-            />
-          </View>
-          <View style={styles.errorContainer}>
-            <Text style={styles.error}>{this.state.error}</Text>
-          </View>
-        </View>
-      </ScrollView>
+        </ScrollView>
       </KeyboardAwareScrollView>
     );
   }
@@ -199,7 +242,13 @@ const styles = StyleSheet.create({
   body: {
     flexGrow: 1,
     padding: 0,
-    backgroundColor: colors.greyBackground
+    //backgroundColor: colors.greyBackground
+  },
+  text1: {
+    fontSize: 15,
+    margin: 1,
+    color: colors.text,
+    fontFamily: "Rubik-Bold"
   },
   error: {
     color: colors.errorMessage
@@ -242,6 +291,14 @@ const styles = StyleSheet.create({
   textInputWrapper: {
     paddingHorizontal: 23,
     marginTop: 15
+  },
+  warningWrapper:{
+      paddingHorizontal: 23,
+      marginTop: 15,
+      borderWidth: 2,
+      borderColor: colors.brandSecondary,
+      borderRadius: 2,
+      paddingVertical: 20
   },
   textInput: {
     height: 50,

@@ -84,9 +84,9 @@ constructor(props){
               </View>
           </View>
         </ScrollView>
-        {/* <View style={styles.footerContainer}>
+        <View style={styles.footerContainer}>
           <Button title="Logout" type="solid" buttonStyle={styles.button} titleStyle={{color:colors.white}} onPress={()=>this.handleSignOut()}/>
-    </View> */}
+    </View>
       </View>
     );
   }

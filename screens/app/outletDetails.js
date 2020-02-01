@@ -319,16 +319,16 @@ class OutletMenuScreen extends Component {
     const outlet = this.props.mainStore.selectedOutlet;
     const categorizedMenu = this.categorize(this.state.menu,'cid');
     console.log(categorizedMenu);
-    menuList = this.renderMenu();
-    //  menuList = this.state.menu.map((l, i) => (
-    //    <FoodItem
-    //      item={l}
-    //      key={i}
-    //      addProductToArray={this.addProductToArray}
-    //      getProduct={this.getProduct}
-    //      alterQuantity={this.alterQuantity}
-    //    />
-    // ));
+    //menuList = this.renderMenu();
+     menuList = this.state.menu.map((l, i) => (
+       <FoodItem
+         item={l}
+         key={i}
+         addProductToArray={this.addProductToArray}
+         getProduct={this.getProduct}
+         alterQuantity={this.alterQuantity}
+       />
+    ));
     return (
       <View style={styles.container}>
         <HeaderComponent title="Home" navigation={this.props.navigation} />

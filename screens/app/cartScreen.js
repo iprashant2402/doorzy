@@ -37,11 +37,23 @@ export default class CartScreen extends Component {
       address: undefined,
       showIndicator: false,
       showModal: false,
-      instruction: ''
+      instruction: '',
+      offers: [],
     };
   }
 
   componentDidMount(){
+    const offersRef = firebase.firestore().collection('offers');
+    const thisRef = this;
+    offersRef.get().then(function(offers){
+      var temp = [];
+      offers.forEach(function(offer){
+        temp.push(offer.data());
+      });
+      thisRef.setState({
+        offers : temp
+      });
+    }).catch(err => console.log(err));
     if(this.props.mainStore.user.addresses){
       const address = this.props.mainStore.user.addresses[0];
       this.setState({
@@ -76,6 +88,12 @@ export default class CartScreen extends Component {
     });
   }
 
+  handleOfferText = (text) => {
+    this.setState({
+      couponCode : text.trim()
+    });
+  }
+
   submitOrder = () => {
     if (!(this.state.address === "" || this.state.address === undefined) && !(this.props.mainStore.cart.length<1)) {
       this.setState({ showIndicator: true }, () => {
@@ -86,7 +104,7 @@ export default class CartScreen extends Component {
             this.props.mainStore.uid,
             this.props.mainStore.user.phone,
             this.props.mainStore.cart,
-            this.state.instruction
+            this.state.instruction,
           )
         ) {
           this.setState({ showIndicator: false }, () => {
@@ -205,6 +223,16 @@ export default class CartScreen extends Component {
           
           {productItem}
           {estTotal}
+          
+          <View style={styles.ph20}>
+            <Text style={styles.textHeading}>Enter coupon code:</Text>
+          </View>
+          <Divider style={{ height: 10, backgroundColor: colors.white }} />
+          <View style={styles.ph20}>
+              <TextInput placeholder="Enter Coupon Code here." style={styles.offerBox} onChangeText={(text)=>{this.handleOfferText(text)}} value={this.state.couponCode}/>
+          </View>
+
+          <Divider style={{ height: 10, backgroundColor: colors.white }} />
 
           <View style={styles.ph20}>
               <TextInput placeholder="Any specific instructions? Add ciggaretes here." style={styles.instructionBox} onChangeText={(text)=>{this.handleInstructionText(text)}} value={this.state.instruction}/>
@@ -236,6 +264,14 @@ export default class CartScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: colors.white
+  },
+  offerBox: {
+    borderColor: colors.greyBorder,
+    borderWidth: 1,
+    borderRadius: 5,
+    padding : 10,
+    height: 40,
     backgroundColor: colors.white
   },
   instructionBox: {
