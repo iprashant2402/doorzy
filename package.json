@@ -8,6 +8,7 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@babel/plugin-transform-regenerator": "7.4.4",
     "expo": "^33.0.0",
     "expo-analytics-segment": "^5.0.1",
     "expo-font": "^5.0.1",

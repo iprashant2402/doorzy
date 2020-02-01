@@ -118,6 +118,7 @@ class OutletMenuScreen extends Component {
   addProductToArray = product => {
     const tempArray = this.state.products;
     product.quantity = product.quantity + 1;
+    console.log('addproducts',product)
     tempArray.push(product);
     this.setState({
       products: tempArray
@@ -127,6 +128,7 @@ class OutletMenuScreen extends Component {
   alterQuantity = (product, inc) => {
     const tempArray1 = this.state.products;
     const tempArray2 = this.state.menu;
+    console.log('temp2',tempArray2.length)
     const cart = this.props.mainStore.cart;
     var found = false;
     var item_index = 0;
@@ -167,6 +169,7 @@ class OutletMenuScreen extends Component {
     for (var i = 0; i < tempArray2.length; i++) {
       if (tempArray2[i].id === product.id) tempArray2[i] = product;
     }
+    console.log('newTemp2',tempArray2.length)
     this.setState({
       products: tempArray1,
       menu: tempArray2
@@ -307,6 +310,7 @@ class OutletMenuScreen extends Component {
     const categorizedMenu = this.categorize(this.state.menu,'cid');
     const temp = [];
     for(let[cat,items] of categorizedMenu){
+      console.log('items',items.length)
       // const catCom = (function(){
       //   return ();
       // })(); 
@@ -318,7 +322,7 @@ class OutletMenuScreen extends Component {
   render() {
     const outlet = this.props.mainStore.selectedOutlet;
     const categorizedMenu = this.categorize(this.state.menu,'cid');
-    console.log(categorizedMenu);
+    // console.log(categorizedMenu);
     menuList = this.renderMenu();
     //  menuList = this.state.menu.map((l, i) => (
     //    <FoodItem

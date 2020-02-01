@@ -40,7 +40,8 @@ class RegisterScreen extends Component {
       lname: "",
       phone: "",
       error: "",
-      loading : false
+      loading : false,
+      otpsend: false
     };
   }
 
@@ -76,8 +77,75 @@ class RegisterScreen extends Component {
     }
   };
 
-   onSubmit = async () => {
+  otpSend = async() => {
+    
     if (this.validate(this.state.fname, this.state.lname, this.state.phone)) {
+      var details = {
+        phone: encodeURI(this.state.phone)
+      };
+      var formBody = [];
+      for (var property in details) {
+        var encodedKey = encodeURIComponent(property);
+        var encodedValue = encodeURIComponent(details[property]);
+        formBody.push(encodedKey + "=" + encodedValue);
+      }
+      formBody = formBody.join("&");
+      let self=this;
+      // const { otpsend } = self.state;
+      //return await fetch(this.props.userstore.sendotp, {
+      return await fetch("http://192.168.43.37:3000/" + "api/sendotp", {
+        method: "POST",
+        headers: {
+          Accept: "application/x-www-form-urlencoded",
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: formBody
+      })
+        .then(
+          (response) => {if(response.status===200){self.state.otpsend=true}console.log(response)})
+        .then(responseJson => responseJson);
+    }
+    else{
+    console.log(this.state.error);
+      this.setState({loading:false});
+    }
+  };
+  otpVerify = async() => {
+    
+    var code = this.state.verificationCode;
+    var details = {
+      phone: encodeURI(this.state.phone),
+      otp: encodeURI(code)
+    };
+
+    var formBody = [];
+    for (var property in details) {
+      var encodedKey = encodeURIComponent(property);
+      var encodedValue = encodeURIComponent(details[property]);
+      formBody.push(encodedKey + "=" + encodedValue);
+    }
+    formBody = formBody.join("&");
+
+    //  return await fetch(this.props.userstore.verifyotp, {
+    return await fetch("http://192.168.43.37:3000/" + "api/verifyotp", {
+      method: "POST",
+      headers: {
+        Accept: "application/x-www-form-urlencoded",
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+      body: formBody
+    })
+      .then((response) => {console.log('====================================');
+      console.log(response);
+      console.log('====================================');})
+      .then(responseJson => {
+        console.log(responseJson);
+        // this._verify(responseJson);
+      });
+    
+  };
+   onSubmit = async () => {
+    if (this.validate(this.state.fname, this.state.lname)) {
       this.setState({loading:true});
       const db = firebase.firestore();
       var uid = this.props.mainStore.uid;
@@ -179,12 +247,33 @@ class RegisterScreen extends Component {
               buttonStyle={styles.btn}
               type="solid"
               raised={false}
-              onPress={this.onSubmit}
+              onPress={this.otpSend}
               title="Next"
               loading={this.state.loading}
               disabled={this.state.loading}
             />
           </View>
+          <View style={styles.textInputWrapper}>
+            <TextInput
+              style={styles.textInput}
+              placeholder="Verification code"
+              value={this.state.verificationCode}
+              keyboardType="numeric"
+              onChangeText={verificationCode => {
+                this.setState({ verificationCode });
+              }}
+              maxLength={6}
+            />
+          </View>
+          <Button
+            buttonStyle={styles.btn}
+            type="solid"
+            raised={false}
+            onPress={this.otpVerify}
+            title="Verify"
+            loading={this.state.loading}
+            disabled={this.state.loading}
+          />
           <View style={styles.errorContainer}>
             <Text style={styles.error}>{this.state.error}</Text>
           </View>
