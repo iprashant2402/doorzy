@@ -196,6 +196,13 @@ class OutletMenuScreen extends Component {
     Segment.screen(this.props.mainStore.selectedOutlet.title+" Menu Screen");
     const thisRef = this;
     this.focusListener = this.props.navigation.addListener("didFocus", () => {
+      if(this.props.mainStore.selectedOutlet.id==="gNh5tRkgCaoDG14kjv5Z"){
+      alert("Use coupon DOORZYIT and get 10% off up to Rs.100 on orders above Rs.100");
+      }
+      if(this.props.mainStore.selectedOutlet.id==="1LfXLUiWlagIOEmdG9WT"){
+        
+      alert("Use coupon DOORZYHART and get 20% off up to Rs.100 on orders above Rs.100");
+      }
       this.setState({
         menu: [],
         products: []
@@ -343,6 +350,7 @@ class OutletMenuScreen extends Component {
                 {outlet.active ? "Open" : "Closed"}
               </Text>
             </View>
+            
             <Divider style={{ backgroundColor: "transparent", height: 10 }} />
             <View style={{ paddingHorizontal: 20 }}>
               <Text style={styles.menuTitle}>Menu</Text>
