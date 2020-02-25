@@ -33,6 +33,7 @@ export default class CartScreen extends Component {
     super(props);
     this.state = {
       products: [],
+      couponCodeTemp: "",
       couponCode: "NILL",
       address: undefined,
       showIndicator: false,
@@ -90,8 +91,52 @@ export default class CartScreen extends Component {
 
   handleOfferText = (text) => {
     this.setState({
-      couponCode : text.trim()
+      couponCodeTemp : text.trim()
     });
+  }
+
+  checkCouponCode = () => {
+    if(!(this.state.couponCodeTemp === "")){
+      var code = this.state.couponCodeTemp;
+      const thisRef = this;
+      var dbCodes = [];
+      var flag = false;
+      var appliedCode = {};
+      firebase.firestore().collection('offers').get().then(function(snap){
+        snap.forEach(function(item){
+          if(code.toLowerCase() === item.data().title.toLowerCase()){
+            flag = true;
+            appliedCode = item.data();
+          }
+        });
+        if(flag){
+          var flag2 = false;
+          for(var i=0; i<thisRef.props.mainStore.cart.length; i++){
+            console.log(thisRef.props.mainStore.cart[i].brand.toLowerCase());
+            console.log(appliedCode.brand.toLowerCase());
+            if(thisRef.props.mainStore.cart[i].brand.trim().toLowerCase() === appliedCode.brand.trim().toLowerCase()){
+              console.log("TRUE TRUE TRUE");
+              flag2 = true;
+            }
+          }
+          if(flag2){
+            alert("Coupon code successfully applied.");
+            thisRef.setState({
+              couponCode: appliedCode.title
+            });
+          }
+          else{
+            alert('This code is not applicable on the current outlet.');
+            thisRef.setState({
+              couponCode: 'NILL'
+            });
+          }
+        }
+        else{
+          alert("Invalid Coupon code.");
+        }
+      }).catch(function(err){console.log(err);});
+    }
   }
 
   submitOrder = () => {
@@ -228,8 +273,20 @@ export default class CartScreen extends Component {
             <Text style={styles.textHeading}>Enter coupon code:</Text>
           </View>
           <Divider style={{ height: 10, backgroundColor: colors.white }} />
-          <View style={styles.ph20}>
-              <TextInput placeholder="Enter Coupon Code here." style={styles.offerBox} onChangeText={(text)=>{this.handleOfferText(text)}} value={this.state.couponCode}/>
+          <View style={styles.split}>
+              <View style={styles.leftDiv}>
+                <TextInput placeholder="Enter Coupon Code here." style={styles.offerBox} onChangeText={(text)=>{this.handleOfferText(text)}} value={this.state.couponCodeTemp}/>
+              </View>
+              <View style={styles.rightDiv}>
+              <Button
+                title="Apply"
+                buttonStyle={styles.offrBtn}
+                titleStyle={styles.btnTitle}
+                type="solid"
+                loading={this.state.showIndicator}
+                onPress={() => this.checkCouponCode()}
+              />
+              </View> 
           </View>
 
           <Divider style={{ height: 10, backgroundColor: colors.white }} />
@@ -346,6 +403,18 @@ const styles = StyleSheet.create({
   ph20: {
     paddingHorizontal: 20
   },
+  split: {
+    paddingHorizontal: 20,
+    flexDirection: 'row'
+  },
+  leftDiv:{
+    flex : 3,
+    paddingHorizontal: 5
+  },
+  rightDiv:{
+    flex : 1,
+    paddingHorizontal: 5
+  },
   header: {
     flexDirection: "row",
     padding: 10,
@@ -383,6 +452,12 @@ const styles = StyleSheet.create({
     backgroundColor: colors.brandPrimary,
     borderRadius: 0,
     height: 50
+  },
+  offrBtn: {
+    backgroundColor: colors.successButton,
+    borderRadius: 5,
+    padding : 10,
+    height: 40,
   },
   btnTitle: {
     color: colors.white,

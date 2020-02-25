@@ -63,11 +63,9 @@ class OfferScreen extends Component {
               <View style={styles.container}>
                 <HeaderComponent title="Home" navigation={this.props.navigation} />
                 <View style={{paddingHorizontal : 20,paddingTop : 20}}>
-                <ListItem key="offer" subtitle="*Offer Valid for Limited Period" title="Buy 1 Milky Mist Yoghurt, Get 1 FREE*" leftIcon={{ name: "card-giftcard",color:colors.successButton }}/>
+                <ListItem key="offer" subtitle="*Offer Valid for Limited Period" title="Use code DOORZYHART & Get 20% OFF on all orders above 100 from Hart Lounge*" leftIcon={{ name: "card-giftcard",color:colors.successButton }}/>
                 <Divider style={{ backgroundColor: "transparent", height: 5 }} />
-                <ListItem key="offer" subtitle="*Upto INR 100" title="Order from TAPRI & Get 20% OFF*" leftIcon={{ name: "card-giftcard",color:colors.successButton }}/>
-                <Divider style={{ backgroundColor: "transparent", height: 20 }} />
-                <ListItem key="offer" subtitle="*Upto INR 100" title="Order from CHINA VALLEY & Get 22% OFF*" leftIcon={{ name: "card-giftcard",color:colors.successButton }}/>
+                <ListItem key="offer" subtitle="*Upto INR 100" title="Order from Minute Meals & Get 10% OFF*. USE CODE - DOORZYIT" leftIcon={{ name: "card-giftcard",color:colors.successButton }}/>
                 <Divider style={{ backgroundColor: "transparent", height: 20 }} />
                 </View>
               </View>

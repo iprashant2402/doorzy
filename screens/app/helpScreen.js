@@ -66,6 +66,7 @@ class HelpScreen extends Component {
                     How can we help you?
                   </Text>
                 </View>
+                {issuesList}
                 <ScrollView contentContainerStyle={{paddingTop : 10}}>
                 <ChatBox style={styles.chatBox}/>
                 </ScrollView>
