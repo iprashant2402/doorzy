@@ -6,6 +6,7 @@ import { inject } from "mobx-react/native";
 import {colors} from "../../colors/colors";
 import * as Segment from 'expo-analytics-segment';
 import { Notifications } from 'expo';
+import registerForPushNotificationsAsync from "../../util/registerPushNotification";
 
 
 if (Platform.OS !== "web") {
@@ -76,6 +77,7 @@ export default class AuthLoading extends Component {
     firebase.auth().onAuthStateChanged(function(user) {
       if (user) {
         const uid = user.uid;
+        registerForPushNotificationsAsync(uid);
         const userRef = db.collection("users").doc(uid);
         storeRef.mainStore.setUid(uid);
         thisRef._syncNotifications(uid);
