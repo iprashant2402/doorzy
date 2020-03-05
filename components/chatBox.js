@@ -46,6 +46,7 @@ export default class ChatBox extends Component {
               });
               Alert.alert("We have recieved your message and are looking into the matter. We will get back to you as soon as possible. Sorry for any inconvenience caused.");
           }).catch(err=>console.log(err));
+          fetch('https://powerful-wave-93367.herokuapp.com/newMessageNotification');
       }
   }
 
