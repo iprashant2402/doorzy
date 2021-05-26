@@ -57,7 +57,7 @@ export default class ChatBox extends Component {
         <View style={styles.inputWrapper}>
         <TextInput 
         value={this.state.message} 
-        placeholder="Please tell us your concern."
+        placeholder="Please tell us your concern guys."
         style={styles.chatInput}
         onChangeText={(text)=>this.setState({message:text})}
         />
